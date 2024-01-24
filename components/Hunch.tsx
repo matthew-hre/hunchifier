@@ -79,7 +79,6 @@ function formatDateTime(date: string) {
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
-    timeZone: "local",
   });
   return localDate;
 }

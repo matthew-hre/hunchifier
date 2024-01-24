@@ -119,6 +119,6 @@ export default async function AdminPanel() {
 
 function formatDateTime(date: Date) {
   const d = new Date(date);
-  const localTime = d.toLocaleTimeString("en-US", { timeZone: "local" });
+  const localTime = d.toLocaleTimeString("en-US");
   return `${d.toLocaleDateString()} ${localTime}`;
 }
