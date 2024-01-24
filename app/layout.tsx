@@ -11,8 +11,12 @@ import { cn } from "@/lib/utils";
 import ThemeProvider from "@/components/ThemeProvider";
 
 // no vercel url needed yet
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(defaultUrl),
   title: "Hunchifier",
   description: "Born out of a hatred for Miro",
 };
