@@ -118,6 +118,6 @@ export default async function AdminPanel({
 
 function formatDateTime(date: Date) {
   const d = new Date(date);
-  const time = d.toLocaleTimeString("en-US");
-  return `${d.toLocaleDateString()} ${time}`;
+  const localTime = d.toLocaleTimeString("en-US", { timeZone: "local" });
+  return `${d.toLocaleDateString()} ${localTime}`;
 }

@@ -35,6 +35,10 @@ export default function RootLayout({
         fontSans.variable
       )}
     >
+      <head>
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"

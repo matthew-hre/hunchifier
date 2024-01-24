@@ -73,11 +73,13 @@ export default function Hunch({ hunch }: any) {
 
 function formatDateTime(date: string) {
   const dateObj = new Date(date);
-  return dateObj.toLocaleString("en-US", {
+  const localDate = dateObj.toLocaleString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
+    timeZone: "local",
   });
+  return localDate;
 }
