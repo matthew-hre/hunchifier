@@ -28,7 +28,7 @@ export default function newHunch() {
     ]);
 
     if (error) {
-      console.log(error);
+      console.error(error);
       return redirect("/newhunch?message=Invalid%20credentials");
     }
 

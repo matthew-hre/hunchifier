@@ -45,8 +45,6 @@ export default async function Login({
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    console.log(`${origin}/auth/callback`);
-
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {

@@ -38,6 +38,36 @@ export default async function Index() {
     return data;
   };
 
+  const downloadHunchesAsCSV = async () => {
+    const user_id = await supabase.auth
+      .getUser()
+      .then((user) => user.data?.user?.id);
+
+    const { data, error } = await supabase
+      .from("hunches")
+      .select("*")
+      .eq("user_id", user_id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const csv = data.map((hunch) => {
+      return `${hunch.possible_problem},${hunch.possible_solution},${hunch.possible_client},${hunch.created_at}`;
+    });
+
+    const csvString = csv.join("\n");
+
+    const blob = new Blob([csvString], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "hunches.csv");
+    link.click();
+  };
+
   const logout = async () => {
     "use server";
 
@@ -69,7 +99,9 @@ export default async function Index() {
         </form>
       </header>
       <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-12">
-        <HunchCounter />
+        <Card>
+          <HunchCounter />
+        </Card>
         <Card>
           <Link href="/newhunch">
             <button
