@@ -40,7 +40,12 @@ export default async function Leaderboard() {
   const getProfiles = async () => {
     const { data, error } = await supabase.from("profiles").select("*");
 
-    for (const profile of data as any[]) {
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const profilePromises = data.map(async (profile) => {
       const { data: hunchesData, error: hunchesError } = await supabase
         .from("hunches")
         .select("*", { count: "exact" })
@@ -52,14 +57,12 @@ export default async function Leaderboard() {
       }
 
       profile.hunches_count = hunchesData?.length;
-    }
+      return profile;
+    });
 
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const profilesWithHunchCounts = await Promise.all(profilePromises);
 
-    return data;
+    return profilesWithHunchCounts;
   };
 
   const sortedProfiles = await getProfiles().then((profiles) => {
