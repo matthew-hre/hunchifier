@@ -8,6 +8,7 @@ import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { Card } from "@/components/ui/card";
 import HunchCounter from "@/components/HunchCounter";
+import Header from "@/components/Header";
 
 export default async function Index() {
   const cookieStore = cookies();
@@ -38,68 +39,13 @@ export default async function Index() {
     return data;
   };
 
-  const downloadHunchesAsCSV = async () => {
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
-
-    const { data, error } = await supabase
-      .from("hunches")
-      .select("*")
-      .eq("user_id", user_id)
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    const csv = data.map((hunch) => {
-      return `${hunch.possible_problem},${hunch.possible_solution},${hunch.possible_client},${hunch.created_at}`;
-    });
-
-    const csvString = csv.join("\n");
-
-    const blob = new Blob([csvString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", "hunches.csv");
-    link.click();
-  };
-
-  const logout = async () => {
-    "use server";
-
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    return redirect("/signup");
-  };
-
   const hunches = await getHunches();
 
   return (
     <div className="flex flex-col items-center min-h-screen">
-      <header className="fixed z-10 bg-background flex items-center justify-between w-full max-w-2xl px-4 py-2 border-b border-secondary">
-        <Link href="/">
-          <h1 className="text-2xl font-bold">Hunchifier</h1>
-        </Link>
-        <form action={logout}>
-          <button type="submit" className="text-sm text-primary">
-            Logout
-          </button>
-        </form>
-      </header>
-      <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-12">
-        <Card>
+      <Header />
+      <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
+        <Card className="flex flex-col items-center justify-center p-4 pt-2">
           <HunchCounter />
         </Card>
         <Card>
