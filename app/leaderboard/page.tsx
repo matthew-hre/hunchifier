@@ -48,7 +48,7 @@ export default async function Leaderboard() {
     const profilePromises = data.map(async (profile) => {
       const { data: hunchesData, error: hunchesError } = await supabase
         .from("hunches")
-        .select("*", { count: "exact" })
+        .select("user_id", { count: "exact" })
         .eq("user_id", profile.user_id);
 
       if (hunchesError) {
