@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
+import Head from "next/head";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -37,10 +38,10 @@ export default function RootLayout({
         fontSans.variable
       )}
     >
-      <head>
+      <Head>
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-      </head>
+      </Head>
       <body>
         <ThemeProvider
           attribute="class"
