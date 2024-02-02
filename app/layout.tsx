@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Hunchifier",
   description: "Born out of a hatred for Miro",
+  appleWebApp: {
+    title: "Hunchifier",
+  },
 };
 
 export default function RootLayout({
@@ -45,7 +48,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="max-w-screen-sm mx-auto px-4">{children}</main>
+          <main className="px-4">{children}</main>
         </ThemeProvider>
       </body>
     </html>
