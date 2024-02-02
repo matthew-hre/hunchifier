@@ -3,6 +3,7 @@ import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import LoginFormClient from "./LoginFormClient";
+import SEO from "@/components/SEO";
 
 export default async function Login({
   searchParams,
@@ -61,10 +62,13 @@ export default async function Login({
   };
 
   return (
-    <LoginFormClient
-      searchParams={searchParams}
-      signIn={signIn}
-      signInWithGithub={signInWithGithub}
-    />
+    <>
+      <SEO pageTitle="Hunchifier" pageDescription="Login" />
+      <LoginFormClient
+        searchParams={searchParams}
+        signIn={signIn}
+        signInWithGithub={signInWithGithub}
+      />
+    </>
   );
 }

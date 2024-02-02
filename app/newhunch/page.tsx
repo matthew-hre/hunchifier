@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import HunchFormClient from "./HunchFormClient";
 import Header from "@/components/Header";
+import SEO from "@/components/SEO";
 
 export default function newHunch() {
   const createHunch = async (formData: FormData) => {
@@ -37,6 +38,7 @@ export default function newHunch() {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
+      <SEO pageTitle="Hunchifier" pageDescription="Create a new hunch" />
       <Header />
       <div className="w-full max-w-2xl pt-4 py-2 space-y-2 border-top border-secondary mt-14 h-auto">
         <HunchFormClient createHunch={createHunch} />

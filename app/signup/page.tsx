@@ -3,6 +3,7 @@ import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import SignUpFormClient from "./SignUpFormClient";
+import SEO from "@/components/SEO";
 
 export default async function Index({
   searchParams,
@@ -68,10 +69,13 @@ export default async function Index({
   };
 
   return (
-    <SignUpFormClient
-      searchParams={searchParams}
-      signInWithGithub={signInWithGithub}
-      signUp={signUp}
-    />
+    <>
+      <SEO pageTitle="Hunchifier" pageDescription="Sign up for an account" />
+      <SignUpFormClient
+        searchParams={searchParams}
+        signInWithGithub={signInWithGithub}
+        signUp={signUp}
+      />
+    </>
   );
 }

@@ -9,6 +9,7 @@ import { FiPlus } from "react-icons/fi";
 import { Card } from "@/components/ui/card";
 import HunchCounter from "@/components/HunchCounter";
 import Header from "@/components/Header";
+import SEO from "@/components/SEO";
 
 export default async function Index() {
   const cookieStore = cookies();
@@ -43,6 +44,10 @@ export default async function Index() {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
+      <SEO
+        pageTitle="Hunchifier"
+        pageDescription="Born out of a hatred for Miro"
+      />
       <Header />
       <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
         <Card className="flex flex-col items-center justify-center p-4 pt-2">

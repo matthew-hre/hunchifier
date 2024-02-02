@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import Header from "@/components/Header";
 
 import { redirect } from "next/navigation";
+import SEO from "@/components/SEO";
 
 export default async function Leaderboard() {
   const cookieStore = cookies();
@@ -55,6 +56,7 @@ export default async function Leaderboard() {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
+      <SEO pageTitle="Hunchifier" pageDescription="Leaderboard" />
       <Header />
       <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
         {profiles && (
