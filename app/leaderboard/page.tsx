@@ -38,70 +38,52 @@ export default async function Leaderboard() {
   const isAdmin = await getAdmin();
 
   const getProfiles = async () => {
-    const { data, error } = await supabase.from("profiles").select("*");
+    const { data, error } = await supabase
+      .from("user_hunch_count")
+      .select("*")
+      .order("hunch_count", { ascending: false });
 
     if (error) {
       console.error(error);
       return;
     }
 
-    const profilePromises = data.map(async (profile) => {
-      const { data: hunchesData, error: hunchesError } = await supabase
-        .from("hunches")
-        .select("*", { count: "exact" })
-        .eq("user_id", profile.user_id);
-
-      if (hunchesError) {
-        console.error(hunchesError);
-        return;
-      }
-
-      profile.hunches_count = hunchesData?.length;
-      return profile;
-    });
-
-    const profilesWithHunchCounts = await Promise.all(profilePromises);
-
-    return profilesWithHunchCounts;
+    return data;
   };
 
-  const sortedProfiles = await getProfiles().then((profiles) => {
-    return profiles?.sort((a, b) => {
-      return b.hunches_count - a.hunches_count;
-    });
-  });
+  const profiles = await getProfiles();
 
   return (
     <div className="flex flex-col items-center min-h-screen">
       <Header />
       <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
-        {sortedProfiles && (
+        {profiles && (
           <>
             <FancyCard
-              profile={sortedProfiles[0]}
+              profile={profiles[0]}
               place={1}
               isAdmin={isAdmin}
               user_id={user.id}
             />
             <FancyCard
-              profile={sortedProfiles[1]}
+              profile={profiles[1]}
               place={2}
               isAdmin={isAdmin}
               user_id={user.id}
             />
             <FancyCard
-              profile={sortedProfiles[2]}
+              profile={profiles[2]}
               place={3}
               isAdmin={isAdmin}
               user_id={user.id}
             />
           </>
         )}
-        {sortedProfiles?.map((profile: any) => {
+        {profiles?.map((profile: any) => {
           // skip the first three profiles
-          if (profile.user_id === sortedProfiles[0].user_id) return;
-          if (profile.user_id === sortedProfiles[1].user_id) return;
-          if (profile.user_id === sortedProfiles[2].user_id) return;
+          if (profile.user_id === profiles[0].user_id) return;
+          if (profile.user_id === profiles[1].user_id) return;
+          if (profile.user_id === profiles[2].user_id) return;
 
           return (
             <Card
@@ -115,7 +97,7 @@ export default async function Leaderboard() {
                   className="text-lg font-bold text-primary bg-gray-200 rounded-full p-6 w-8 h-8 flex items-center justify-center"
                   style={{ textAlign: "center" }}
                 >
-                  {sortedProfiles.indexOf(profile) + 1}th
+                  {profiles.indexOf(profile) + 1}th
                 </h2>
               </div>
               <div className="flex flex-col items-left justify-center mr-4">
@@ -124,7 +106,7 @@ export default async function Leaderboard() {
                 </p>
                 <p className="text-sm text-primary">
                   {isAdmin || profile.user_id === user.id
-                    ? profile.hunches_count
+                    ? profile.hunch_count
                     : "???"}{" "}
                   hunches
                 </p>
@@ -176,9 +158,7 @@ function FancyCard({
             place === 1 ? "text-md" : place === 2 ? "text-sm" : "text-sm"
           } text-primary`}
         >
-          {isAdmin || profile.user_id === user_id
-            ? profile.hunches_count
-            : "???"}{" "}
+          {isAdmin || profile.user_id === user_id ? profile.hunch_count : "???"}{" "}
           hunches
         </p>
       </div>
