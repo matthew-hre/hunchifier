@@ -31,7 +31,7 @@ export default async function AdminPanel({
 
   let { data: profiles, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("is_admin")
     .eq("user_id", user_id);
 
   if (error) {
@@ -39,11 +39,11 @@ export default async function AdminPanel({
     return;
   }
 
-  if (profiles?.length === 0 || profiles === null) {
-    redirect("/");
-  }
-
-  if (profiles[0].is_admin === false) {
+  if (
+    profiles?.length === 0 ||
+    profiles === null ||
+    profiles[0].is_admin === false
+  ) {
     redirect("/");
   }
 

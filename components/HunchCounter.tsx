@@ -15,19 +15,16 @@ export default async function HunchCounter() {
       .then((user) => user.data?.user?.id);
 
     const { data, error } = await supabase
-      .from("hunches")
-      .select("*")
-      .eq("user_id", user_id)
-      .order("created_at", { ascending: false });
-
-    const hunchesMade = data?.length ?? 0;
+      .from("user_hunch_count")
+      .select("hunch_count")
+      .eq("user_id", user_id);
 
     if (error) {
       console.error(error);
       return;
     }
 
-    return hunchesMade;
+    return data?.[0]?.hunch_count;
   };
 
   const getUserId = async () => {

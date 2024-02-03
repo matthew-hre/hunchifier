@@ -25,7 +25,7 @@ export default async function Leaderboard() {
 
     const { data, error } = await supabase
       .from("profiles")
-      .select("*")
+      .select("is_admin")
       .eq("user_id", user_id);
 
     if (error) {
@@ -41,7 +41,7 @@ export default async function Leaderboard() {
   const getProfiles = async () => {
     const { data, error } = await supabase
       .from("user_hunch_count")
-      .select("*")
+      .select("user_id, first_name, last_name, hunch_count")
       .order("hunch_count", { ascending: false });
 
     if (error) {
@@ -52,6 +52,20 @@ export default async function Leaderboard() {
     return data;
   };
 
+  const getBadge = (index: number) => {
+    if (index === 0) return "🥇";
+    if (index === 1) return "🥈";
+    if (index === 2) return "🥉";
+    return index + 1 + "th";
+  };
+
+  const getColor = (index: number, isUser: boolean) => {
+    if (index === 0) return "bg-yellow-200";
+    if (index === 1) return "bg-gray-200";
+    if (isUser) return "bg-blue-200";
+    return "";
+  };
+
   const profiles = await getProfiles();
 
   return (
@@ -59,58 +73,40 @@ export default async function Leaderboard() {
       <SEO pageTitle="Hunchifier" pageDescription="Leaderboard" />
       <Header />
       <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
-        {profiles && (
-          <>
-            <FancyCard
-              profile={profiles[0]}
-              place={1}
-              isAdmin={isAdmin}
-              user_id={user.id}
-            />
-            <FancyCard
-              profile={profiles[1]}
-              place={2}
-              isAdmin={isAdmin}
-              user_id={user.id}
-            />
-            <FancyCard
-              profile={profiles[2]}
-              place={3}
-              isAdmin={isAdmin}
-              user_id={user.id}
-            />
-          </>
-        )}
-        {profiles?.map((profile: any) => {
-          // skip the first three profiles
-          if (profile.user_id === profiles[0].user_id) return;
-          if (profile.user_id === profiles[1].user_id) return;
-          if (profile.user_id === profiles[2].user_id) return;
+        {profiles?.map((profile: any, index: number) => {
+          const isWinner = index < 3;
+          const isUser = profile.user_id === user.id;
 
           return (
             <Card
               key={profile.user_id}
-              className={`flex flex-row items-center p-4 ${
-                profile.user_id === user.id ? "bg-blue-200" : "bg-white"
-              }`}
+              className={`flex items-center p-4 ${
+                isWinner ? "flex-col" : "flex-row"
+              } ${getColor(index, isUser)}`}
             >
               <div className="flex flex-col items-center justify-center mr-4">
                 <h2
-                  className="text-lg font-bold text-primary bg-gray-200 rounded-full p-6 w-8 h-8 flex items-center justify-center"
-                  style={{ textAlign: "center" }}
+                  className={`font-bold text-primary ${
+                    isWinner ? "text-4xl" : "bg-gray-200 text-lg"
+                  } rounded-full p-6 w-8 h-8 flex items-center justify-center`}
                 >
-                  {profiles.indexOf(profile) + 1}th
+                  {getBadge(index)}
                 </h2>
               </div>
-              <div className="flex flex-col items-left justify-center mr-4">
-                <p className="text-md font-bold text-primary">
+              <div
+                className={`flex flex-col ${
+                  isWinner ? "items-center" : "items-left"
+                } justify-center mr-4`}
+              >
+                <p
+                  className={`font-bold text-primary ${
+                    index < 3 ? "text-xl" : "text-md"
+                  }`}
+                >
                   {profile.first_name} {profile.last_name}
                 </p>
                 <p className="text-sm text-primary">
-                  {isAdmin || profile.user_id === user.id
-                    ? profile.hunch_count
-                    : "???"}{" "}
-                  hunches
+                  {isAdmin || isUser ? profile.hunch_count : "???"} hunches
                 </p>
               </div>
             </Card>
@@ -118,52 +114,5 @@ export default async function Leaderboard() {
         })}
       </div>
     </div>
-  );
-}
-
-function FancyCard({
-  profile,
-  place,
-  isAdmin,
-  user_id,
-}: {
-  profile: any;
-  place: number;
-  isAdmin: boolean;
-  user_id: string;
-}) {
-  return (
-    <Card
-      className={`flex flex-col items-center p-4 ${
-        place === 1 ? "bg-yellow-200" : place === 2 ? "bg-gray-200" : ""
-      }`}
-    >
-      <div className="flex flex-row items-center justify-center mr-4">
-        <h2
-          className={`${
-            place === 1 ? "text-4xl" : place === 2 ? "text-3xl" : "text-2xl"
-          } font-bold text-primaryflex items-center justify-center`}
-        >
-          {place === 1 ? "🥇" : place === 2 ? "🥈" : place === 3 ? "🥉" : place}
-        </h2>
-      </div>
-      <div className="flex flex-col items-center justify-center mr-4">
-        <p
-          className={`${
-            place === 1 ? "text-xl" : place === 2 ? "text-lg" : "text-md"
-          } font-bold text-primary`}
-        >
-          {profile.first_name} {profile.last_name}
-        </p>
-        <p
-          className={`${
-            place === 1 ? "text-md" : place === 2 ? "text-sm" : "text-sm"
-          } text-primary`}
-        >
-          {isAdmin || profile.user_id === user_id ? profile.hunch_count : "???"}{" "}
-          hunches
-        </p>
-      </div>
-    </Card>
   );
 }
