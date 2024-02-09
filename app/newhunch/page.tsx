@@ -34,7 +34,7 @@ export default async function newHunch() {
       return redirect("/newhunch?message=Invalid%20credentials");
     }
 
-    return redirect("/login");
+    return redirect("/");
   };
 
   return (

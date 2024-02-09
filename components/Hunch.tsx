@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FiTrash } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
 
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
@@ -31,10 +32,25 @@ export default function Hunch({ hunch }: any) {
     return redirect("/");
   };
 
+  const editHunch = async () => {
+    "use server";
+
+    return redirect(`/edithunch/${hunch.id}`);
+  };
+
+  const getTimestamp = () => {
+    // if there's no "last updated" date, return "created at" date
+    if (!hunch.updated_at) {
+      return "Created at " + formatDateTime(hunch.created_at);
+    }
+
+    return "Last updated at " + formatDateTime(hunch.updated_at);
+  };
+
   return (
     <Card className="relative">
       <CardHeader className="pb-4">
-        <CardDescription>{formatDateTime(hunch.created_at)}</CardDescription>
+        <CardDescription>{getTimestamp()}</CardDescription>
         <form action={deleteHunch} className="absolute right-2 top-1 ">
           <Button
             type="submit"
@@ -42,6 +58,15 @@ export default function Hunch({ hunch }: any) {
             variant="ghost"
           >
             <FiTrash />
+          </Button>
+        </form>
+        <form action={editHunch} className="absolute right-14 top-1">
+          <Button
+            type="submit"
+            className="rounded-full w-10 h-10 p-2"
+            variant="ghost"
+          >
+            <FiEdit />
           </Button>
         </form>
       </CardHeader>
@@ -74,7 +99,6 @@ export default function Hunch({ hunch }: any) {
 function formatDateTime(date: string) {
   const dateObj = new Date(date);
   const localDate = dateObj.toLocaleString("en-US", {
-    weekday: "long",
     month: "long",
     day: "numeric",
     hour: "numeric",
