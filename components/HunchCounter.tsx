@@ -1,14 +1,14 @@
 // a progress bar that shows how many hunches you have left. the goal is to have 50 hunches.
 
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 
 import { Progress } from "@/components/ui/progress";
 
 export default async function HunchCounter() {
   const getHunches = async () => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    "use server";
+
+    const supabase = createClient();
 
     const user_id = await supabase.auth
       .getUser()
@@ -28,8 +28,9 @@ export default async function HunchCounter() {
   };
 
   const getUserId = async () => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    "use server";
+
+    const supabase = createClient();
 
     const user_id = await supabase.auth
       .getUser()
@@ -41,35 +42,14 @@ export default async function HunchCounter() {
   const user_id = await getUserId();
   const hunchesLeft = await getHunches();
 
-  // a progress bar that shows how many hunches you have left. the goal is to have 50 hunches.
-  if (user_id == "d06c8a7e-4820-488e-bd8c-d2ed90d44022") {
-    // khalif has to do 200 hunches
-    return (
-      <div className="relative w-full">
-        <p className="relative text-center text-primary text-lg">
-          {hunchesLeft !== 50
-            ? hunchesLeft + " / 200 hunches made. Cope."
-            : "200 hunches made. I hate you."}
-        </p>
-        <Progress
-          className="w-full"
-          value={Math.min(hunchesLeft ?? 0, 200) / 2}
-        />
-      </div>
-    );
-  } else {
-    return (
-      <div className="relative w-full">
-        <p className="relative text-center text-primary text-lg">
-          {hunchesLeft !== 50
-            ? hunchesLeft + " / 50 hunches made"
-            : "50 hunches made!"}
-        </p>
-        <Progress
-          className="w-full"
-          value={Math.min(hunchesLeft ?? 0, 50) * 2}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className="relative w-full">
+      <p className="relative text-center text-primary text-lg">
+        {hunchesLeft !== 50
+          ? hunchesLeft + " / 50 hunches made"
+          : "50 hunches made!"}
+      </p>
+      <Progress className="w-full" value={Math.min(hunchesLeft ?? 0, 50) * 2} />
+    </div>
+  );
 }

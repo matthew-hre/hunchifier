@@ -8,16 +8,16 @@ import { Button } from "@/components/ui/button";
 import { FiTrash } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
 
+import Link from "next/link";
+
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default function Hunch({ hunch }: any) {
   const deleteHunch = async () => {
     "use server";
 
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = createClient();
 
     const { error } = await supabase
       .from("hunches")
@@ -30,12 +30,6 @@ export default function Hunch({ hunch }: any) {
     }
 
     return redirect("/");
-  };
-
-  const editHunch = async () => {
-    "use server";
-
-    return redirect(`/edithunch/${hunch.id}`);
   };
 
   const getTimestamp = () => {
@@ -60,7 +54,10 @@ export default function Hunch({ hunch }: any) {
             <FiTrash />
           </Button>
         </form>
-        <form action={editHunch} className="absolute right-14 top-1">
+        <Link
+          href={`/edithunch/${hunch.id}`}
+          className="absolute right-14 top-1"
+        >
           <Button
             type="submit"
             className="rounded-full w-10 h-10 p-2"
@@ -68,7 +65,7 @@ export default function Hunch({ hunch }: any) {
           >
             <FiEdit />
           </Button>
-        </form>
+        </Link>
       </CardHeader>
       <CardContent>
         <div className="mb-2">

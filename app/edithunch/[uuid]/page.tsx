@@ -1,7 +1,6 @@
 //"use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import EditHunchFormClient from "./EditHunchFormClient";
@@ -16,8 +15,7 @@ export default async function EditHunch({
 }: {
   params: { uuid: string };
 }) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const getUserId = async () => {
     const user_id = await supabase.auth
@@ -44,8 +42,7 @@ export default async function EditHunch({
   const updateHunch = async (formData: FormData) => {
     "use server";
 
-    const tempCookieStore = cookies();
-    const tempSupabase = createClient(tempCookieStore);
+    const tempSupabase = createClient();
 
     const problem = formData.get("problem") as string;
     const solution = formData.get("solution") as string;

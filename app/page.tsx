@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 import Hunch from "@/components/Hunch";
 
 import Link from "next/link";
@@ -11,11 +10,14 @@ import Header from "@/components/Header";
 import SEO from "@/components/SEO";
 import AuthVerifier from "@/components/AuthVerifier";
 
-export default async function Index() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+import { Suspense } from "react";
 
+export default async function Index() {
   const getHunches = async () => {
+    "use server";
+
+    const supabase = createClient();
+
     const user_id = await supabase.auth
       .getUser()
       .then((user) => user.data?.user?.id);
@@ -65,9 +67,11 @@ export default async function Index() {
             </button>
           </Link>
         </Card>
-        {hunches?.map((hunch) => (
-          <Hunch key={hunch.id} hunch={hunch} />
-        ))}
+        <Suspense fallback={<div>Loading...</div>}>
+          {hunches?.map((hunch) => (
+            <Hunch key={hunch.id} hunch={hunch} />
+          ))}
+        </Suspense>
       </div>
     </div>
   );

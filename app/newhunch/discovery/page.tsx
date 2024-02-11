@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import HunchFormClient from "./DiscoveryFormClient";
@@ -13,8 +12,7 @@ export default function newHunch() {
     const possible_problem = formData.get("problem") as string;
     const possible_solution = formData.get("solution") as string;
     const possible_client = formData.get("users") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = createClient();
     const user_id = await supabase.auth
       .getUser()
       .then((user) => user.data?.user?.id);

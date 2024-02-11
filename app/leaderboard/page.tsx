@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 
 import { Card } from "@/components/ui/card";
 
@@ -9,16 +8,10 @@ import { redirect } from "next/navigation";
 import SEO from "@/components/SEO";
 
 export default async function Leaderboard() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const { user } = (await supabase.auth.getUser())?.data;
-
-  if (user === null) {
-    redirect("/login");
-  }
-
   const getAdmin = async () => {
+    "use server";
+
+    const supabase = createClient();
     const user_id = await supabase.auth
       .getUser()
       .then((user) => user.data?.user?.id);
@@ -39,6 +32,10 @@ export default async function Leaderboard() {
   const isAdmin = await getAdmin();
 
   const getProfiles = async () => {
+    "use server";
+
+    const supabase = createClient();
+
     const { data, error } = await supabase
       .from("user_hunch_count")
       .select("user_id, first_name, last_name, hunch_count")
@@ -50,6 +47,18 @@ export default async function Leaderboard() {
     }
 
     return data;
+  };
+
+  const getUserId = async () => {
+    "use server";
+
+    const supabase = createClient();
+
+    const user_id = await supabase.auth
+      .getUser()
+      .then((user) => user.data?.user?.id);
+
+    return user_id;
   };
 
   const getBadge = (index: number) => {
@@ -67,6 +76,7 @@ export default async function Leaderboard() {
   };
 
   const profiles = await getProfiles();
+  const userId = await getUserId();
 
   return (
     <div className="flex flex-col items-center min-h-screen">
@@ -75,7 +85,7 @@ export default async function Leaderboard() {
       <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
         {profiles?.map((profile: any, index: number) => {
           const isWinner = index < 3;
-          const isUser = profile.user_id === user.id;
+          const isUser = profile.user_id === userId;
 
           return (
             <Card

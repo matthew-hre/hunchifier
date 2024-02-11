@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -13,8 +12,7 @@ export default async function Header() {
   const logout = async () => {
     "use server";
 
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = createClient();
 
     const { error } = await supabase.auth.signOut();
 

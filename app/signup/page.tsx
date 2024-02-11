@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { headers, cookies } from "next/headers";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import SignUpFormClient from "./SignUpFormClient";
@@ -10,8 +10,7 @@ export default async function Index({
 }: {
   searchParams: { message: string };
 }) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { user } = (await supabase.auth.getUser())?.data;
 
@@ -23,8 +22,7 @@ export default async function Index({
     "use server";
 
     const origin = headers().get("origin") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = createClient();
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
@@ -47,8 +45,7 @@ export default async function Index({
     const origin = headers().get("origin") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = createClient();
 
     const { error } = await supabase.auth.signUp({
       email,
