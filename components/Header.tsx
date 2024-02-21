@@ -30,6 +30,16 @@ export default async function Header() {
         <IoHome className="text-2xl sm:hidden" />
       </Link>
       <div className="flex flex-row items-center space-x-2">
+      <Link href="/analytics">
+          <Button
+            className="text-sm text-primary hidden sm:block
+          "
+            variant="link"
+          >
+            Analytics
+          </Button>
+          <IoTrophy className="text-xl sm:hidden mr-4" />
+        </Link>
         <Link href="/leaderboard">
           <Button
             className="text-sm text-primary hidden sm:block
