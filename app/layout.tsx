@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -10,6 +9,7 @@ const fontSans = FontSans({
 
 import { cn } from "@/lib/utils";
 import ThemeProvider from "@/components/ThemeProvider";
+import { Suspense } from "react";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -45,7 +45,17 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="px-4">{children}</main>
+          <main className="px-4">
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center min-h-screen text-xl">
+                  Loading...
+                </div>
+              }
+            >
+              {children}
+            </Suspense>
+          </main>
         </ThemeProvider>
       </body>
     </html>

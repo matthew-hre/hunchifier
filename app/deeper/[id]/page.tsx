@@ -1,19 +1,16 @@
-//"use server";
-
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-import EditHunchFormClient from "./EditHunchFormClient";
+import EditHunchFormClient from "./DeeperHunchFormClient";
 import Header from "@/components/Header";
 import SEO from "@/components/SEO";
-import AuthVerifier from "@/components/AuthVerifier";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default async function EditHunch({
+export default async function DeeperHunch({
   params,
 }: {
-  params: { uuid: string };
+  params: { id: string };
 }) {
   const supabase = createClient();
 
@@ -22,6 +19,10 @@ export default async function EditHunch({
       .getUser()
       .then((user) => user.data?.user?.id);
 
+    if (!user_id) {
+      return redirect("/login");
+    }
+
     return user_id;
   };
 
@@ -29,7 +30,7 @@ export default async function EditHunch({
     const { data, error } = await supabase
       .from("hunches")
       .select("*")
-      .eq("id", params.uuid);
+      .eq("id", params.id);
 
     if (error) {
       console.error(error);
@@ -39,7 +40,7 @@ export default async function EditHunch({
     return data[0];
   };
 
-  const updateHunch = async (formData: FormData) => {
+  const createDeeperHunch = async (formData: FormData) => {
     "use server";
 
     const tempSupabase = createClient();
@@ -47,17 +48,16 @@ export default async function EditHunch({
     const problem = formData.get("problem") as string;
     const solution = formData.get("solution") as string;
     const client = formData.get("users") as string;
-    const hunch_id = params.uuid;
+    const hunch_id = params.id;
 
-    const { error } = await tempSupabase
-      .from("hunches")
-      .update({
-        possible_problem: problem,
-        possible_solution: solution,
-        possible_client: client,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", hunch_id);
+    const { error } = await tempSupabase.from("hunches_ext").insert([
+      {
+        problem: problem,
+        solution: solution,
+        client: client,
+        hunchID: hunch_id,
+      },
+    ]);
 
     if (error) {
       console.error(error);
@@ -78,7 +78,6 @@ export default async function EditHunch({
 
   return (
     <div className="flex flex-col items-center min-h-screen">
-      <AuthVerifier />
       <SEO pageTitle="Hunchifier" pageDescription="Create a new hunch" />
       <Header />
       {!isOwner ? (
@@ -95,7 +94,7 @@ export default async function EditHunch({
       ) : (
         <div className="w-full max-w-2xl pt-4 py-2 space-y-2 border-top border-secondary mt-14 h-auto">
           <EditHunchFormClient
-            updateHunch={updateHunch}
+            createDeeperHunch={createDeeperHunch}
             originalHunch={hunch}
           />
         </div>

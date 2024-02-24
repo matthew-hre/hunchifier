@@ -5,9 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Progress } from "@/components/ui/progress";
 
 export default async function HunchCounter() {
-  const getHunches = async () => {
-    "use server";
-
+  const getHunchCounts = async () => {
     const supabase = createClient();
 
     const user_id = await supabase.auth
@@ -16,7 +14,7 @@ export default async function HunchCounter() {
 
     const { data, error } = await supabase
       .from("user_hunch_count")
-      .select("hunch_count")
+      .select("hunch_count, extended_count")
       .eq("user_id", user_id);
 
     if (error) {
@@ -24,12 +22,22 @@ export default async function HunchCounter() {
       return;
     }
 
-    return data?.[0]?.hunch_count;
+    return data?.[0];
+  };
+
+  const getHunches = async () => {
+    const hunchCounts = await getHunchCounts();
+
+    return hunchCounts?.hunch_count;
+  };
+
+  const getExtendedHunches = async () => {
+    const hunchCounts = await getHunchCounts();
+
+    return hunchCounts?.extended_count;
   };
 
   const getUserId = async () => {
-    "use server";
-
     const supabase = createClient();
 
     const user_id = await supabase.auth
@@ -39,8 +47,8 @@ export default async function HunchCounter() {
     return user_id;
   };
 
-  const user_id = await getUserId();
   const hunchesLeft = await getHunches();
+  const extendedHunches = await getExtendedHunches();
 
   return (
     <div className="relative w-full">
@@ -50,6 +58,19 @@ export default async function HunchCounter() {
           : "50 hunches made!"}
       </p>
       <Progress className="w-full" value={Math.min(hunchesLeft ?? 0, 50) * 2} />
+      {extendedHunches > 0 ? (
+        <>
+          <p className="relative text-center text-primary text-lg mt-4">
+            {extendedHunches !== 5
+              ? extendedHunches + " / 5 deeper hunches made"
+              : "5 deeper hunches made!"}
+          </p>
+          <Progress
+            className="w-full"
+            value={Math.min(extendedHunches ?? 0, 5) * 20}
+          />
+        </>
+      ) : null}
     </div>
   );
 }

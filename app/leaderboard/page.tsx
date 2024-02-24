@@ -4,13 +4,11 @@ import { Card } from "@/components/ui/card";
 
 import Header from "@/components/Header";
 
-import { redirect } from "next/navigation";
 import SEO from "@/components/SEO";
+import { redirect } from "next/navigation";
 
 export default async function Leaderboard() {
   const getAdmin = async () => {
-    "use server";
-
     const supabase = createClient();
     const user_id = await supabase.auth
       .getUser()
@@ -32,8 +30,6 @@ export default async function Leaderboard() {
   const isAdmin = await getAdmin();
 
   const getProfiles = async () => {
-    "use server";
-
     const supabase = createClient();
 
     const { data, error } = await supabase
@@ -50,13 +46,15 @@ export default async function Leaderboard() {
   };
 
   const getUserId = async () => {
-    "use server";
-
     const supabase = createClient();
 
     const user_id = await supabase.auth
       .getUser()
       .then((user) => user.data?.user?.id);
+
+    if (!user_id) {
+      return redirect("/login");
+    }
 
     return user_id;
   };

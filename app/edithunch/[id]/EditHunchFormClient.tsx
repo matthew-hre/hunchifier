@@ -11,9 +11,11 @@ import { useState, useEffect } from "react";
 export default function EditHunchFormClient({
   updateHunch,
   originalHunch,
+  deeperHunch,
 }: {
   updateHunch: (formData: FormData) => void;
   originalHunch: any;
+  deeperHunch: any;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -22,6 +24,10 @@ export default function EditHunchFormClient({
   const initialSolution = originalHunch.possible_solution;
   const initialUsers = originalHunch.possible_client;
 
+  const deeperHunchProblem = deeperHunch[0].problem;
+  const deeperHunchSolution = deeperHunch[0].solution;
+  const deeperHunchClient = deeperHunch[0].client;
+
   useEffect(() => {
     const problemInput = document.getElementById("problem") as HTMLInputElement;
     const solutionInput = document.getElementById(
@@ -29,10 +35,36 @@ export default function EditHunchFormClient({
     ) as HTMLInputElement;
     const usersInput = document.getElementById("users") as HTMLInputElement;
 
+    const deeperProblemInput = document.getElementById(
+      "deeperProblem"
+    ) as HTMLInputElement;
+
+    const deeperSolutionInput = document.getElementById(
+      "deeperSolution"
+    ) as HTMLInputElement;
+
+    const deeperUsersInput = document.getElementById(
+      "deeperUsers"
+    ) as HTMLInputElement;
+
     problemInput.value = initialProblem;
     solutionInput.value = initialSolution;
     usersInput.value = initialUsers;
-  }, [initialProblem, initialSolution, initialUsers]);
+
+    if (deeperHunch) {
+      deeperProblemInput.value = deeperHunchProblem;
+      deeperSolutionInput.value = deeperHunchSolution;
+      deeperUsersInput.value = deeperHunchClient;
+    }
+  }, [
+    initialProblem,
+    initialSolution,
+    initialUsers,
+    deeperHunchProblem,
+    deeperHunchSolution,
+    deeperHunchClient,
+    deeperHunch,
+  ]);
 
   const handleUpdateHunch = async (e: any) => {
     e.preventDefault();
@@ -40,6 +72,8 @@ export default function EditHunchFormClient({
     await updateHunch(new FormData(e.target));
     setLoading(false);
   };
+
+  console.log(deeperHunch);
 
   return (
     <form onSubmit={handleUpdateHunch} className="space-y-4 h-auto mb-16">
@@ -85,6 +119,52 @@ export default function EditHunchFormClient({
           required
         />
       </div>
+      {deeperHunch ? (
+        <>
+          <div className="flex flex-col">
+            <Label htmlFor="problem" className="mb-4">
+              <h2 className="text-lg">Expand on your problem</h2>
+              <p className="text-sm text-muted-foreground">
+                Let&apos;s dive deeper into the problem you are trying to solve.
+              </p>
+            </Label>
+            <Textarea
+              id="deeperProblem"
+              name="deeperProblem"
+              placeholder={deeperHunchProblem}
+              required
+            />
+          </div>
+          <div className="flex flex-col">
+            <Label htmlFor="solution" className="mb-4">
+              <h2 className="text-lg">Expand on your solution</h2>
+              <p className="text-sm text-muted-foreground">
+                Now, let&apos;s flesh out the solution you are proposing.
+              </p>
+            </Label>
+            <Textarea
+              id="deeperSolution"
+              name="deeperSolution"
+              placeholder={deeperHunchSolution}
+              required
+            />
+          </div>
+          <div className="flex flex-col">
+            <Label htmlFor="users" className="mb-4">
+              <h2 className="text-lg">Who are the users?</h2>
+              <p className="text-sm text-muted-foreground">
+                Let&apos;s more deeply identify the users of this solution.
+              </p>
+            </Label>
+            <Textarea
+              id="deeperUsers"
+              name="deeperUsers"
+              placeholder={deeperHunchClient}
+              required
+            />
+          </div>
+        </>
+      ) : null}
       {loading ? (
         <Button
           disabled

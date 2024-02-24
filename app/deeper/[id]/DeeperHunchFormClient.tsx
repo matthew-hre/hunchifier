@@ -6,68 +6,67 @@ import { Label } from "@/components/ui/label";
 
 import { Loader2 } from "lucide-react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function DiscoveryFormClient({
-  createHunch,
+export default function DeeperHunchFormClient({
+  createDeeperHunch,
+  originalHunch,
 }: {
-  createHunch: (formData: FormData) => void;
+  createDeeperHunch: (formData: FormData) => void;
+  originalHunch: any;
 }) {
   const [loading, setLoading] = useState(false);
 
-  const handleCreateHunch = async (e: any) => {
+  // set the initial values of the form to the original hunch
+  const initialProblem = originalHunch.possible_problem;
+  const initialSolution = originalHunch.possible_solution;
+  const initialUsers = originalHunch.possible_client;
+
+  const handleCreateDeeperHunch = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    await createHunch(new FormData(e.target));
+    await createDeeperHunch(new FormData(e.target));
     setLoading(false);
   };
 
   return (
-    <form onSubmit={handleCreateHunch} className="space-y-4 h-auto mb-16">
-      <p className="text-center text-primary text-lg">
-        Working on it. This feature is coming soon.
-      </p>
-      {/* <div className="flex flex-col">
+    <form onSubmit={handleCreateDeeperHunch} className="space-y-4 h-auto mb-16">
+      <div className="flex flex-col">
         <Label htmlFor="problem" className="mb-4">
-          <h2 className="text-lg">Possible Problem</h2>
+          <h2 className="text-lg">Expand on your problem</h2>
           <p className="text-sm text-muted-foreground">
-            What is the problem you are trying to solve?
+            Let&apos;s dive deeper into the problem you are trying to solve.
           </p>
         </Label>
         <Textarea
           id="problem"
           name="problem"
-          placeholder="Possible Problem"
+          placeholder={initialProblem}
           required
         />
       </div>
       <div className="flex flex-col">
         <Label htmlFor="solution" className="mb-4">
-          <h2 className="text-lg">Possible Solution</h2>
+          <h2 className="text-lg">Expand on your solution</h2>
           <p className="text-sm text-muted-foreground">
-            What is the solution you are proposing?
+            Now, let&apos;s flesh out the solution you are proposing.
           </p>
         </Label>
         <Textarea
           id="solution"
           name="solution"
-          placeholder="Possible Solution"
+          placeholder={initialSolution}
           required
         />
       </div>
       <div className="flex flex-col">
         <Label htmlFor="users" className="mb-4">
-          <h2 className="text-lg">Possible Users</h2>
+          <h2 className="text-lg">Who are the users?</h2>
           <p className="text-sm text-muted-foreground">
-            Who are the users of this solution?
+            Let&apos;s more deeply identify the users of this solution.
           </p>
         </Label>
-        <Textarea
-          id="users"
-          name="users"
-          placeholder="Possible Users"
-          required
-        />
+        <Textarea id="users" name="users" placeholder={initialUsers} required />
       </div>
       {loading ? (
         <Button
@@ -75,16 +74,16 @@ export default function DiscoveryFormClient({
           className="w-[calc(100%-2rem)] fixed bottom-4 sm:w-full sm:relative sm:bottom-0"
         >
           <Loader2 className="animate-spin w-4 h-4 mr-2" />
-          Creating Hunch...
+          Creating Deeper Hunch...
         </Button>
       ) : (
         <Button
           type="submit"
           className="w-[calc(100%-2rem)] fixed bottom-4 sm:w-full sm:relative sm:bottom-0"
         >
-          Create Hunch
+          Create Deeper Hunch
         </Button>
-      )} */}
+      )}
     </form>
   );
 }

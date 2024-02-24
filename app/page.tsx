@@ -8,19 +8,22 @@ import { Card } from "@/components/ui/card";
 import HunchCounter from "@/components/HunchCounter";
 import Header from "@/components/Header";
 import SEO from "@/components/SEO";
-import AuthVerifier from "@/components/AuthVerifier";
+
+import { redirect } from "next/navigation";
 
 import { Suspense } from "react";
 
 export default async function Index() {
   const getHunches = async () => {
-    "use server";
-
     const supabase = createClient();
 
     const user_id = await supabase.auth
       .getUser()
       .then((user) => user.data?.user?.id);
+
+    if (!user_id) {
+      return redirect("/login");
+    }
 
     const { data, error } = await supabase
       .from("hunches")
@@ -44,7 +47,6 @@ export default async function Index() {
         pageTitle="Hunchifier"
         pageDescription="Born out of a hatred for Miro"
       />
-      <AuthVerifier />
       <Header />
       <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
         <Card className="flex flex-col items-center justify-center p-4 pt-2">
