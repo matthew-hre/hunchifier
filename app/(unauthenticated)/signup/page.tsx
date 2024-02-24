@@ -10,14 +10,6 @@ export default async function Index({
 }: {
   searchParams: { message: string };
 }) {
-  const supabase = createClient();
-
-  const { user } = (await supabase.auth.getUser())?.data;
-
-  if (user) {
-    redirect("/");
-  }
-
   const signInWithGithub = async () => {
     "use server";
 

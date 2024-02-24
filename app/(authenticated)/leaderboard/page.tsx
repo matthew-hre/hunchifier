@@ -5,19 +5,19 @@ import { Card } from "@/components/ui/card";
 import Header from "@/components/Header";
 
 import SEO from "@/components/SEO";
-import { redirect } from "next/navigation";
+
+import { getUserId } from "@/lib/supabase/utils";
 
 export default async function Leaderboard() {
+  const userId = await getUserId();
+
   const getAdmin = async () => {
     const supabase = createClient();
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
 
     const { data, error } = await supabase
       .from("profiles")
       .select("is_admin")
-      .eq("user_id", user_id);
+      .eq("user_id", userId);
 
     if (error) {
       console.error(error);
@@ -45,20 +45,6 @@ export default async function Leaderboard() {
     return data;
   };
 
-  const getUserId = async () => {
-    const supabase = createClient();
-
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
-
-    if (!user_id) {
-      return redirect("/login");
-    }
-
-    return user_id;
-  };
-
   const getBadge = (index: number) => {
     if (index === 0) return "🥇";
     if (index === 1) return "🥈";
@@ -74,7 +60,6 @@ export default async function Leaderboard() {
   };
 
   const profiles = await getProfiles();
-  const userId = await getUserId();
 
   return (
     <div className="flex flex-col items-center min-h-screen">

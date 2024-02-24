@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
+
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -10,6 +12,7 @@ const fontSans = FontSans({
 import { cn } from "@/lib/utils";
 import ThemeProvider from "@/components/ThemeProvider";
 import { Suspense } from "react";
+import { getUserId } from "@/lib/supabase/utils";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -24,11 +27,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const userId = await getUserId();
+
+  if (!userId) {
+    redirect("/login");
+  }
+
   return (
     <html
       lang="en"

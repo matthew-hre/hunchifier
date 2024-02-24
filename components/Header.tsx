@@ -12,6 +12,8 @@ export default async function Header() {
   const logout = async () => {
     "use server";
 
+    console.log("logging out");
+
     const supabase = createClient();
 
     const { error } = await supabase.auth.signOut();
@@ -21,11 +23,12 @@ export default async function Header() {
       return;
     }
 
-    return redirect("/signup");
+    return redirect("/login");
   };
 
   // Define navigation items
   const navItems = [
+    { href: "/app", icon: IoHome, label: "Home" },
     { href: "/analytics", icon: IoStatsChart, label: "Analytics" },
     {
       href: "/leaderboard",
@@ -66,14 +69,17 @@ const NavItem = ({
   label: any;
   logoutAction?: any;
 }) => (
-  <Link href={href || "#"} className={`flex flex-row items-center space-x-2`}>
+  <>
     {href ? (
-      <>
+      <Link
+        href={href || "#"}
+        className={`flex flex-row items-center space-x-2`}
+      >
         <Button className="text-sm text-primary hidden sm:block" variant="link">
           {label}
         </Button>
         <Icon size={24} className="sm:hidden" />
-      </>
+      </Link>
     ) : (
       <form action={logoutAction} className="flex items-center space-x-2">
         <Button
@@ -88,5 +94,5 @@ const NavItem = ({
         </Button>
       </form>
     )}
-  </Link>
+  </>
 );

@@ -1,32 +1,23 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-import EditHunchFormClient from "./DeeperHunchFormClient";
+import EditHunchFormClient from "./EditHunchFormClient";
 import Header from "@/components/Header";
 import SEO from "@/components/SEO";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { getUserId } from "@/lib/supabase/utils";
 
-export default async function DeeperHunch({
+export default async function EditHunch({
   params,
 }: {
   params: { id: string };
 }) {
-  const supabase = createClient();
-
-  const getUserId = async () => {
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
-
-    if (!user_id) {
-      return redirect("/login");
-    }
-
-    return user_id;
-  };
+  const userId = await getUserId();
 
   const getHunch = async () => {
+    const supabase = createClient();
+
     const { data, error } = await supabase
       .from("hunches")
       .select("*")
@@ -40,7 +31,23 @@ export default async function DeeperHunch({
     return data[0];
   };
 
-  const createDeeperHunch = async (formData: FormData) => {
+  const getDeeperHunch = async () => {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+      .from("hunches_ext")
+      .select("*")
+      .eq("hunchID", params.id);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    return data;
+  };
+
+  const updateHunch = async (formData: FormData) => {
     "use server";
 
     const tempSupabase = createClient();
@@ -48,30 +55,51 @@ export default async function DeeperHunch({
     const problem = formData.get("problem") as string;
     const solution = formData.get("solution") as string;
     const client = formData.get("users") as string;
+
+    const deeperHunchProblem = formData.get("deeperProblem") as string;
+    const deeperHunchSolution = formData.get("deeperSolution") as string;
+    const deeperHunchClient = formData.get("deeperUsers") as string;
+
     const hunch_id = params.id;
 
-    const { error } = await tempSupabase.from("hunches_ext").insert([
-      {
-        problem: problem,
-        solution: solution,
-        client: client,
-        hunchID: hunch_id,
-      },
-    ]);
+    const { error } = await tempSupabase
+      .from("hunches")
+      .update({
+        possible_problem: problem,
+        possible_solution: solution,
+        possible_client: client,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", hunch_id);
 
     if (error) {
       console.error(error);
       return redirect("/edithunch?message=Invalid%20credentials");
     }
 
-    return redirect("/");
+    const { error: deeperError } = await tempSupabase
+      .from("hunches_ext")
+      .update({
+        problem: deeperHunchProblem,
+        solution: deeperHunchSolution,
+        client: deeperHunchClient,
+      })
+      .eq("hunchID", hunch_id);
+
+    if (deeperError) {
+      console.error(deeperError);
+      return redirect("/edithunch?message=Invalid%20credentials");
+    }
+
+    return redirect("/app");
   };
 
   const hunch = await getHunch();
 
+  const deeperHunch = await getDeeperHunch();
+
   const isHunchOwner = async () => {
-    const user_id = await getUserId();
-    return hunch.user_id === user_id;
+    return hunch.user_id === userId;
   };
 
   const isOwner = await isHunchOwner();
@@ -94,8 +122,9 @@ export default async function DeeperHunch({
       ) : (
         <div className="w-full max-w-2xl pt-4 py-2 space-y-2 border-top border-secondary mt-14 h-auto">
           <EditHunchFormClient
-            createDeeperHunch={createDeeperHunch}
+            updateHunch={updateHunch}
             originalHunch={hunch}
+            deeperHunch={deeperHunch}
           />
         </div>
       )}

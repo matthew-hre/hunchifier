@@ -4,15 +4,10 @@ import { redirect } from "next/navigation";
 import HunchFormClient from "./HunchFormClient";
 import Header from "@/components/Header";
 import SEO from "@/components/SEO";
+import { getUserId } from "@/lib/supabase/utils";
 
 export default async function newHunch() {
-  const supabase = createClient();
-
-  const user = await supabase.auth.getUser();
-
-  if (!user) {
-    return redirect("/login");
-  }
+  const userId = await getUserId();
 
   const createHunch = async (formData: FormData) => {
     "use server";
@@ -22,16 +17,13 @@ export default async function newHunch() {
     const possible_client = formData.get("users") as string;
 
     const supabase = createClient();
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
 
     const { error } = await supabase.from("hunches").insert([
       {
         possible_problem,
         possible_solution,
         possible_client,
-        user_id,
+        user_id: userId,
       },
     ]);
 
@@ -40,7 +32,7 @@ export default async function newHunch() {
       return redirect("/newhunch?message=Invalid%20credentials");
     }
 
-    return redirect("/");
+    return redirect("/app");
   };
 
   const createDeeperHunch = async (formData: FormData) => {
@@ -52,9 +44,6 @@ export default async function newHunch() {
     const possible_client = formData.get("users") as string;
 
     const supabase = createClient();
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
 
     const { data, error } = await supabase
       .from("hunches")
@@ -63,7 +52,7 @@ export default async function newHunch() {
           possible_problem,
           possible_solution,
           possible_client,
-          user_id,
+          user_id: userId,
         },
       ])
       .select();

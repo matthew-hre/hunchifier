@@ -41,7 +41,7 @@ export default async function Hunch({ hunch }: any) {
       return;
     }
 
-    return redirect("/");
+    return redirect("/app");
   };
 
   const getTimestamp = () => {
@@ -58,7 +58,7 @@ export default async function Hunch({ hunch }: any) {
 
     const { data, error } = await supabase
       .from("hunches_ext")
-      .select("*")
+      .select("id, problem, solution, client")
       .eq("hunchID", hunch.id);
 
     if (error) {

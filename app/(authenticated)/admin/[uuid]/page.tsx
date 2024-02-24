@@ -7,45 +7,37 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { createClient } from "@/lib/supabase/server";
+import { getUserId } from "@/lib/supabase/utils";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import Link from "next/link";
-
-export default async function AdminPanel() {
+export default async function AdminPanel({
+  params,
+}: {
+  params: { uuid: string };
+}) {
   const supabase = createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user === null) {
-    redirect("/login");
-  }
-
-  const user_id = user.id;
+  const userId = await getUserId();
 
   let { data: profiles, error } = await supabase
     .from("profiles")
     .select("is_admin")
-    .eq("user_id", user_id);
+    .eq("user_id", userId);
 
   if (error) {
     console.error(error);
     return;
   }
 
-  if (
-    profiles?.length === 0 ||
-    profiles === null ||
-    profiles[0].is_admin === false
-  ) {
-    redirect("/");
+  if (!profiles || !profiles[0]?.is_admin) {
+    redirect("/app");
   }
 
   const getAllHunches = async () => {
     const { data, error } = await supabase
       .from("detailed_hunches")
       .select("*")
+      .eq("user_id", params.uuid)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -63,9 +55,9 @@ export default async function AdminPanel() {
           <Link href="/">
             <h1 className="text-2xl font-bold">Hunchifier</h1>
           </Link>
-          <p className="text-primary">Viewing all hunches</p>
-          <Link href="/">
-            <p className="text-primary hover:underline">Exit admin panel</p>
+          <p className="text-primary">Viewing hunches for {params.uuid}</p>
+          <Link href="/admin">
+            <p className="text-primary hover:underline">Back to admin panel</p>
           </Link>
         </header>
       </div>
@@ -86,12 +78,7 @@ export default async function AdminPanel() {
               return (
                 <TableRow key={hunch.id} className="hover:bg-secondary">
                   <TableCell className="break-words max-w-64 align-top font-semibold">
-                    <Link
-                      href={`/admin/${hunch.user_id}`}
-                      className="text-primary hover:underline"
-                    >
-                      {hunch.email}
-                    </Link>
+                    {hunch.email}
                   </TableCell>
                   <TableCell className="break-words max-w-64 align-top">
                     {hunch.possible_problem}

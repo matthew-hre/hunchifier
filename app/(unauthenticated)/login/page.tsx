@@ -10,14 +10,6 @@ export default async function Login({
 }: {
   searchParams: { message: string };
 }) {
-  const supabase = createClient();
-
-  const { user } = (await supabase.auth.getUser())?.data;
-
-  if (user) {
-    redirect("/");
-  }
-
   const signIn = async (formData: FormData) => {
     "use server";
 
@@ -34,7 +26,7 @@ export default async function Login({
       return redirect("/login?message=Invalid%20credentials");
     }
 
-    return redirect("/");
+    return redirect("/app");
   };
 
   const signInWithGithub = async () => {

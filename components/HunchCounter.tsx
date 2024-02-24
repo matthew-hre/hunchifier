@@ -3,19 +3,18 @@
 import { createClient } from "@/lib/supabase/server";
 
 import { Progress } from "@/components/ui/progress";
+import { getUserId } from "@/lib/supabase/utils";
 
 export default async function HunchCounter() {
+  const userId = await getUserId();
+
   const getHunchCounts = async () => {
     const supabase = createClient();
-
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
 
     const { data, error } = await supabase
       .from("user_hunch_count")
       .select("hunch_count, extended_count")
-      .eq("user_id", user_id);
+      .eq("user_id", userId);
 
     if (error) {
       console.error(error);
@@ -35,16 +34,6 @@ export default async function HunchCounter() {
     const hunchCounts = await getHunchCounts();
 
     return hunchCounts?.extended_count;
-  };
-
-  const getUserId = async () => {
-    const supabase = createClient();
-
-    const user_id = await supabase.auth
-      .getUser()
-      .then((user) => user.data?.user?.id);
-
-    return user_id;
   };
 
   const hunchesLeft = await getHunches();
