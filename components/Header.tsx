@@ -44,7 +44,7 @@ export default async function Header() {
 
   return (
     <header className="fixed z-10 bg-background flex items-center justify-between w-full px-4 py-2 border-b border-secondary">
-      <Link href="/">
+      <Link href="/app">
         <h1 className="text-2xl font-bold hidden sm:block ">Hunchifier</h1>
         <IoHome size={24} className="sm:hidden" />
       </Link>

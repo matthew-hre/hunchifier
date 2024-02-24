@@ -7,7 +7,7 @@ export default function NotFound() {
       <p>
         Page not found.{" "}
         <Link
-          href="/"
+          href="/app"
           className="text-md text-primary underline underline-offset-4 hover:no-underline"
         >
           Back to home

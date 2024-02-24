@@ -76,7 +76,7 @@ export default async function DeeperHunch({
             You are not authorized to edit this hunch
           </h1>
           <div className="w-full flex flex-row justify-center">
-            <Link href="/">
+            <Link href="/app">
               <Button>Go Home</Button>
             </Link>
           </div>

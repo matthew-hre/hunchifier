@@ -49,11 +49,11 @@ export default async function AdminPanel() {
     <div className="absolute top-0 left-0 p-12 w-full flex flex-col items-center min-h-screen">
       <div className="flex flex-col items-center w-full">
         <header className="flex items-center justify-between w-full px-4 py-2 border-b border-secondary">
-          <Link href="/">
+          <Link href="/app">
             <h1 className="text-2xl font-bold">Hunchifier</h1>
           </Link>
           <p className="text-primary">Viewing all hunches</p>
-          <Link href="/">
+          <Link href="/app">
             <p className="text-primary hover:underline">Exit admin panel</p>
           </Link>
         </header>
