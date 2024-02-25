@@ -170,13 +170,18 @@ export default function TinderClient({
       <Card className="flex flex-col items-center justify-center w-full mt-16">
         <CardHeader>
           <p className="text-xl font-semibold text-primary">
-            {badIdeasCount + funnyIdeaCount + goodIdeaCount + gptCount} out of{" "}
-            {totalHunchCount} hunches voted on!
+            {badIdeasCount +
+              funnyIdeaCount +
+              goodIdeaCount +
+              gptCount +
+              existsCount +
+              whatCount}{" "}
+            out of {totalHunchCount} hunches voted on!
           </p>
         </CardHeader>
       </Card>
       <div className="flex flex-row w-full gap-x-2 flex-1">
-        <Card className="min-h-64 w-[32rem]">
+        <Card className="min-h-64 w-[32rem] hidden lg:block">
           {badIdeasCount + funnyIdeaCount + goodIdeaCount + gptCount > 0 ? (
             <ResponsivePie
               data={graphData}
@@ -223,7 +228,7 @@ export default function TinderClient({
           </CardContent>
         </Card>
       </div>
-      <Card className="flex justify-center gap-2 py-4 w-full mt-auto mb-2">
+      <Card className="flex flex-wrap justify-center gap-2 py-4 w-full mt-auto mb-2">
         {graphData.map((button) => (
           <VoteButton
             key={button.id}
