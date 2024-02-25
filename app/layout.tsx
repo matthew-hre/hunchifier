@@ -44,7 +44,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="px-4">{children}</main>
+          <main>{children}</main>
         </ThemeProvider>
       </body>
     </html>
