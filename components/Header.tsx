@@ -28,7 +28,7 @@ export default async function Header() {
 
   // Define navigation items
   const navItems = [
-    { href: "/app", icon: IoHome, label: "Home" },
+    { href: "/app", icon: IoHome, label: "Home", hideOnMobile: true },
     { href: "/analytics", icon: IoStatsChart, label: "Analytics" },
     {
       href: "/leaderboard",
@@ -63,11 +63,13 @@ const NavItem = ({
   icon: Icon,
   label,
   logoutAction,
+  hideOnMobile,
 }: {
   href?: any;
   icon: any;
   label: any;
   logoutAction?: any;
+  hideOnMobile?: boolean;
 }) => (
   <>
     {href ? (
@@ -78,10 +80,13 @@ const NavItem = ({
         <Button className="text-sm text-primary hidden sm:block" variant="link">
           {label}
         </Button>
-        <Icon size={24} className="sm:hidden" />
+        <Icon
+          size={24}
+          className={`sm:hidden ${hideOnMobile ? "hidden" : "block"}`}
+        />
       </Link>
     ) : (
-      <form action={logoutAction} className="flex items-center space-x-2">
+      <form action={logoutAction} className="flex items-center">
         <Button
           type="submit"
           className="text-sm text-primary hidden sm:block"

@@ -24,9 +24,9 @@ export default function EditHunchFormClient({
   const initialSolution = originalHunch.possible_solution;
   const initialUsers = originalHunch.possible_client;
 
-  const deeperHunchProblem = deeperHunch[0].problem;
-  const deeperHunchSolution = deeperHunch[0].solution;
-  const deeperHunchClient = deeperHunch[0].client;
+  const deeperHunchProblem = deeperHunch[0]?.problem || "";
+  const deeperHunchSolution = deeperHunch[0]?.solution || "";
+  const deeperHunchClient = deeperHunch[0]?.client || "";
 
   useEffect(() => {
     const problemInput = document.getElementById("problem") as HTMLInputElement;
@@ -119,7 +119,7 @@ export default function EditHunchFormClient({
           required
         />
       </div>
-      {deeperHunch ? (
+      {deeperHunch && deeperHunch > 0 ? (
         <>
           <div className="flex flex-col">
             <Label htmlFor="problem" className="mb-4">
