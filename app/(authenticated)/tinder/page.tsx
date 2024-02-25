@@ -69,7 +69,7 @@ export default async function Tinder() {
     const { data, error } = await supabase
       .from("tinder_totals")
       .select(
-        "good_ratings, bad_ratings, funny_ratings, gpt_ratings, exists_ratings"
+        "good_ratings, bad_ratings, funny_ratings, gpt_ratings, exists_ratings, what_ratings"
       )
       .eq("userID", userId)
       .single();
@@ -84,6 +84,7 @@ export default async function Tinder() {
         funny_ratings: 0,
         gpt_ratings: 0,
         exists_ratings: 0,
+        what_ratings: 0,
       };
     }
 

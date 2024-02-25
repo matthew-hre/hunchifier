@@ -26,6 +26,7 @@ export default function TinderClient({
   const [badIdeasCount, setBadIdeasCount] = useState(0);
   const [gptCount, setGptCount] = useState(0);
   const [existsCount, setExistsCount] = useState(0);
+  const [whatCount, setWhatCount] = useState(0);
 
   const totalHunchCount = 869;
 
@@ -66,6 +67,12 @@ export default function TinderClient({
     getNewHunch();
   };
 
+  const handleWhat = () => {
+    setWhatCount(whatCount + 1);
+    rateHunch(currentId, "what");
+    getNewHunch();
+  };
+
   const getNewHunch = async () => {
     setPossibleProblem("Loading new hunch...");
     setPossibleSolution("");
@@ -85,13 +92,12 @@ export default function TinderClient({
   const setExistingStats = async () => {
     const stats = await getExistingStats();
 
-    console.log(stats);
-
     setGoodIdeaCount(stats.good_ratings);
     setFunnyIdeaCount(stats.funny_ratings);
     setBadIdeasCount(stats.bad_ratings);
     setGptCount(stats.gpt_ratings);
     setExistsCount(stats.exists_ratings);
+    setWhatCount(stats.what_ratings);
   };
 
   useEffect(() => {
@@ -147,6 +153,15 @@ export default function TinderClient({
       bgcolor: "bg-teal-500",
       hovercolor: "hover:bg-teal-200 hover:text-teal-800",
       onClick: handleExists,
+    },
+    {
+      id: "...what?",
+      label: "...what?",
+      value: whatCount,
+      color: "#f97316",
+      bgcolor: "bg-orange-500",
+      hovercolor: "hover:bg-orange-200 hover:text-orange-800",
+      onClick: handleWhat,
     },
   ];
 
