@@ -21,8 +21,10 @@ export default async function Leaderboard() {
 
     if (error) {
       console.error(error);
-      return;
+      return false;
     }
+
+    if (data.length === 0) return false;
 
     return data[0].leaderboard;
   };

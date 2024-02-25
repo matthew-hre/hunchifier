@@ -80,12 +80,12 @@ export default async function Header() {
   }
 
   return (
-    <header className="fixed z-10 bg-background flex items-center justify-between w-full px-4 py-2 border-b border-secondary">
+    <header className="fixed z-10 bg-background flex items-center justify-between w-full px-6 sm:px-4 py-4 sm:py-2 border-b border-secondary">
       <Link href="/app">
         <h1 className="text-2xl font-bold hidden sm:block ">Hunchifier</h1>
         <IoHome size={24} className="sm:hidden" />
       </Link>
-      <div className="flex flex-row items-center space-x-4">
+      <div className="flex flex-row items-center">
         {navItems.map((item, index) => (
           <NavItem key={index} {...item} />
         ))}
@@ -110,10 +110,7 @@ const NavItem = ({
 }) => (
   <>
     {href ? (
-      <Link
-        href={href || "#"}
-        className={`flex flex-row items-center space-x-2`}
-      >
+      <Link href={href || "#"} className="flex flex-row items-center space-x-6">
         <Button className="text-sm text-primary hidden sm:block" variant="link">
           {label}
         </Button>
@@ -123,7 +120,10 @@ const NavItem = ({
         />
       </Link>
     ) : (
-      <form action={logoutAction} className="flex items-center">
+      <form
+        action={logoutAction}
+        className="flex flex-row items-center space-x-6 sm:space-x-0"
+      >
         <Button
           type="submit"
           className="text-sm text-primary hidden sm:block"
@@ -131,9 +131,9 @@ const NavItem = ({
         >
           <p>{label}</p>
         </Button>
-        <Button type="submit" className="sm:hidden" variant="link">
+        <a type="submit" className="sm:hidden">
           <Icon size={24} />
-        </Button>
+        </a>
       </form>
     )}
   </>
