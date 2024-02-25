@@ -1,11 +1,31 @@
 "use server";
 import AnalyticsClient from "./AnalyticsClient";
 import { createClient } from "@/lib/supabase/server";
+import { getUserId } from "@/lib/supabase/utils";
 import Header from "@/components/Header";
 import SEO from "@/components/SEO";
 
 export default async function AnalyticsServer(props: any) {
   const supabase = createClient();
+  const userId = await getUserId();
+
+  const getAdmin = async () => {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+      .from("user_permissions")
+      .select("leaderboard")
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    return data[0].leaderboard;
+  };
+
+  const isAdmin = await getAdmin();
 
   // select * from daily_rankings in the analytics schema
 
@@ -13,9 +33,17 @@ export default async function AnalyticsServer(props: any) {
     .from("hourly_rankings_12_hours")
     .select("first_name, date, rank");
 
+  if (hourlyError) {
+    console.error(hourlyError);
+  }
+
   const { data: dailyData, error: dailyError } = await supabase
     .from("daily_rankings")
     .select("first_name, date, rank");
+
+  if (dailyError) {
+    console.error(dailyError);
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen">
@@ -24,7 +52,11 @@ export default async function AnalyticsServer(props: any) {
         pageDescription="Born out of a hatred for Miro"
       />
       <Header />
-      <AnalyticsClient hourlyData={hourlyData} dailyData={dailyData} />
+      <AnalyticsClient
+        hourlyData={hourlyData}
+        dailyData={dailyData}
+        isAdmin={isAdmin}
+      />
     </div>
   );
 }

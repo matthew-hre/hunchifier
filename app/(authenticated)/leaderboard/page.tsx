@@ -15,8 +15,8 @@ export default async function Leaderboard() {
     const supabase = createClient();
 
     const { data, error } = await supabase
-      .from("profiles")
-      .select("is_admin")
+      .from("user_permissions")
+      .select("leaderboard")
       .eq("user_id", userId);
 
     if (error) {
@@ -24,7 +24,7 @@ export default async function Leaderboard() {
       return;
     }
 
-    return data[0].is_admin;
+    return data[0].leaderboard;
   };
 
   const isAdmin = await getAdmin();

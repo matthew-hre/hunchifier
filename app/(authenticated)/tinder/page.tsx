@@ -12,8 +12,8 @@ export default async function Tinder() {
     const supabase = createClient();
 
     let { data: profiles, error } = await supabase
-      .from("profiles")
-      .select("is_admin")
+      .from("user_permissions")
+      .select("tinder")
       .eq("user_id", userId);
 
     if (error) {
@@ -21,7 +21,7 @@ export default async function Tinder() {
       return;
     }
 
-    if (!profiles || !profiles[0]?.is_admin) {
+    if (!profiles || !profiles[0]?.tinder) {
       redirect("/app");
     }
   };

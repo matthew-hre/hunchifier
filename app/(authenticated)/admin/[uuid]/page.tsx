@@ -20,8 +20,8 @@ export default async function AdminPanel({
   const userId = await getUserId();
 
   let { data: profiles, error } = await supabase
-    .from("profiles")
-    .select("is_admin")
+    .from("user_permissions")
+    .select("admin")
     .eq("user_id", userId);
 
   if (error) {
@@ -29,7 +29,7 @@ export default async function AdminPanel({
     return;
   }
 
-  if (!profiles || !profiles[0]?.is_admin) {
+  if (!profiles || !profiles[0]?.admin) {
     redirect("/app");
   }
 

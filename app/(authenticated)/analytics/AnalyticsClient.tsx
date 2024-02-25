@@ -15,6 +15,8 @@ export default function AnalyticsClient(props: any) {
   const [dailyData, setDailyData] = useState<TransformedData[]>([]);
   const [hourlyData, setHourlyData] = useState<TransformedData[]>([]);
 
+  // props.isAdmin is available here
+
   useEffect(() => {
     setHourlyData(transformData(props.hourlyData));
     setDailyData(transformData(props.dailyData));
