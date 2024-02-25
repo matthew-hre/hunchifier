@@ -62,6 +62,8 @@ export default async function Tinder() {
   };
 
   const getExistingStats = async () => {
+    "use server";
+
     const supabase = createClient();
 
     const { data, error } = await supabase
@@ -69,24 +71,32 @@ export default async function Tinder() {
       .select(
         "good_ratings, bad_ratings, funny_ratings, gpt_ratings, exists_ratings"
       )
-      .eq("userID", userId);
+      .eq("userID", userId)
+      .single();
 
     if (error) {
-      console.error(error);
-      return;
+      if (error.code !== "PGRST116") {
+        console.error(error);
+      }
+      return {
+        good_ratings: 0,
+        bad_ratings: 0,
+        funny_ratings: 0,
+        gpt_ratings: 0,
+        exists_ratings: 0,
+      };
     }
 
-    return data[0];
+    return data;
   };
 
   await isUserAdmin();
-  const existingStats = await getExistingStats();
 
   return (
     <>
       <Header />
       <TinderClient
-        existingStats={existingStats}
+        getExistingStats={getExistingStats}
         getRandomHunch={getRandomHunch}
         rateHunch={rateHunch}
       />

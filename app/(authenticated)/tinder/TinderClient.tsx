@@ -13,23 +13,19 @@ import { useState, useEffect } from "react";
 import { ResponsivePie } from "@nivo/pie";
 
 export default function TinderClient({
-  existingStats,
+  getExistingStats,
   getRandomHunch,
   rateHunch,
 }: {
-  existingStats: any;
+  getExistingStats: any;
   getRandomHunch: any;
   rateHunch: any;
 }) {
-  const [goodIdeaCount, setGoodIdeaCount] = useState(
-    existingStats.good_ratings
-  );
-  const [funnyIdeaCount, setFunnyIdeaCount] = useState(
-    existingStats.funny_ratings
-  );
-  const [badIdeasCount, setBadIdeasCount] = useState(existingStats.bad_ratings);
-  const [gptCount, setGptCount] = useState(existingStats.gpt_ratings);
-  const [existsCount, setExistsCount] = useState(existingStats.exists_ratings);
+  const [goodIdeaCount, setGoodIdeaCount] = useState(0);
+  const [funnyIdeaCount, setFunnyIdeaCount] = useState(0);
+  const [badIdeasCount, setBadIdeasCount] = useState(0);
+  const [gptCount, setGptCount] = useState(0);
+  const [existsCount, setExistsCount] = useState(0);
 
   const totalHunchCount = 869;
 
@@ -86,8 +82,22 @@ export default function TinderClient({
     setCurrentId(data.id);
   };
 
+  const setExistingStats = async () => {
+    const stats = await getExistingStats();
+
+    console.log(stats);
+
+    setGoodIdeaCount(stats.good_ratings);
+    setFunnyIdeaCount(stats.funny_ratings);
+    setBadIdeasCount(stats.bad_ratings);
+    setGptCount(stats.gpt_ratings);
+    setExistsCount(stats.exists_ratings);
+  };
+
   useEffect(() => {
     getNewHunch();
+
+    setExistingStats();
     // eslint-disable-next-line
   }, []);
 
@@ -102,8 +112,8 @@ export default function TinderClient({
       onClick: handleBadIdea,
     },
     {
-      id: "funny",
-      label: "Funny",
+      id: "Funny Idea",
+      label: "Funny Idea",
       value: funnyIdeaCount,
       color: "#eab308",
       bgcolor: "bg-yellow-500",
@@ -112,8 +122,8 @@ export default function TinderClient({
     },
 
     {
-      id: "good",
-      label: "Good",
+      id: "Good Idea",
+      label: "Good Idea",
       value: goodIdeaCount,
       color: "#22c55e",
       bgcolor: "bg-green-500",
@@ -121,7 +131,7 @@ export default function TinderClient({
       onClick: handleGoodIdea,
     },
     {
-      id: "gpt",
+      id: "GPD'd Idea",
       label: "Obviously GPT'd",
       value: gptCount,
       color: "#3b82f6",
@@ -130,7 +140,7 @@ export default function TinderClient({
       onClick: handleGpt,
     },
     {
-      id: "exists",
+      id: "Existing Idea",
       label: "Already Exists",
       value: existsCount,
       color: "#14b8a6",
