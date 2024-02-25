@@ -46,12 +46,12 @@ export default function HeaderClient({
         {navItems.map((item: any, index: any) => (
           <NavItem key={index} {...item} />
         ))}
-        <a
+        <button
           onClick={() => toggleTheme()}
           className="flex flex-row items-center space-x-6 ml-4"
         >
           {theme === "light" ? <IoMoon size={24} /> : <IoSunny size={24} />}
-        </a>
+        </button>
       </div>
     </header>
   );
