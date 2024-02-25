@@ -38,12 +38,7 @@ export default async function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="system">
           <main>{children}</main>
         </ThemeProvider>
       </body>
