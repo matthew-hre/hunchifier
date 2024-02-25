@@ -17,16 +17,11 @@ import {
 
 import { useTheme } from "next-themes";
 
-export default function HeaderClient({
-  navItems,
-  logoutAction,
-}: {
-  navItems: any;
-  logoutAction: any;
-}) {
+export default function HeaderClient({ navItems }: { navItems: any }) {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
+    console.log("toggling theme");
     if (theme === "light") {
       setTheme("dark");
     }
@@ -34,6 +29,16 @@ export default function HeaderClient({
       setTheme("light");
     }
   };
+
+  // such a hack
+  const navItemsWithTheme = [
+    ...navItems,
+    {
+      icon: theme === "light" ? "IoMoon" : "IoSunny",
+      label: theme === "light" ? <IoMoon size={24} /> : <IoSunny size={24} />,
+      logoutAction: toggleTheme,
+    },
+  ];
 
   return (
     <header className="fixed z-10 bg-background flex items-center justify-between w-full px-6 md:px-4 py-4 md:py-2 border-b border-secondary">
@@ -43,15 +48,9 @@ export default function HeaderClient({
       </Link>
 
       <div className="flex flex-row items-center">
-        {navItems.map((item: any, index: any) => (
+        {navItemsWithTheme.map((item: any, index: any) => (
           <NavItem key={index} {...item} />
         ))}
-        <button
-          onClick={toggleTheme}
-          className="flex flex-row items-center space-x-6 ml-4"
-        >
-          {theme === "light" ? <IoMoon size={24} /> : <IoSunny size={24} />}
-        </button>
       </div>
     </header>
   );
@@ -77,6 +76,8 @@ const NavItem = ({
     IoLogOut: IoLogOut,
     IoFlame: IoFlame,
     IoShield: IoShield,
+    IoSunny: IoSunny,
+    IoMoon: IoMoon,
   };
 
   const IconComponent = icons[icon as string];

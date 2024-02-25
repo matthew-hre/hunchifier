@@ -67,5 +67,5 @@ export default async function Header() {
     navItems.unshift({ href: "/tinder", icon: "IoFlame", label: "Tinder" });
   }
 
-  return <HeaderClient navItems={navItems} logoutAction={logout} />;
+  return <HeaderClient navItems={navItems} />;
 }
