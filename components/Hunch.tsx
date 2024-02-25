@@ -74,9 +74,7 @@ export default async function Hunch({ hunch }: any) {
   return (
     <Card
       className={`relative ${
-        deeperHunch
-          ? "border-yellow-400 border-2 shadow-yellow-400 bg-yellow-50"
-          : ""
+        deeperHunch ? "border-yellow-400 border-2 shadow-yellow-400" : ""
       }`}
     >
       <CardHeader className="pb-4">

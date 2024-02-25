@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 
 import { useState } from "react";
+import Header from "@/components/Header";
 
 export default function SignUpFormClient({
   searchParams,
@@ -42,7 +43,7 @@ export default function SignUpFormClient({
     <>
       <main className="flex flex-col items-center justify-center min-h-screen py-2 space-y-2">
         <div className="flex flex-col items-center justify-center w-20 h-20 rounded-full bg-primary">
-          <FaLightbulb className="w-10 h-10 text-white" />
+          <FaLightbulb className="w-10 h-10 text-secondary" />
         </div>
         <h1 className="text-4xl font-bold tracking-tight">Hunchifier</h1>
         <p className="text-md text-muted-foreground pb-6 md:pb-12">

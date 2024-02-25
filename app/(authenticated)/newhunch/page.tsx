@@ -66,15 +66,9 @@ export default async function newHunch() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
-      <SEO pageTitle="Hunchifier" pageDescription="Create a new hunch" />
-      <Header />
-      <div className="w-full max-w-2xl pt-4 py-2 space-y-2 border-top border-secondary mt-14 h-auto">
-        <HunchFormClient
-          createHunch={createHunch}
-          createDeeperHunch={createDeeperHunch}
-        />
-      </div>
-    </div>
+    <HunchFormClient
+      createHunch={createHunch}
+      createDeeperHunch={createDeeperHunch}
+    />
   );
 }

@@ -48,24 +48,38 @@ export default async function AdminPanel({
     return data;
   };
 
+  const getUser = async () => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("first_name, last_name")
+      .eq("user_id", params.uuid)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    return data;
+  };
+
+  const user = await getUser();
+
   return (
     <div className="absolute top-0 left-0 p-12 w-full flex flex-col items-center min-h-screen">
       <div className="flex flex-col items-center w-full">
-        <header className="flex items-center justify-between w-full px-4 py-2 border-b border-secondary">
-          <Link href="/app">
-            <h1 className="text-2xl font-bold">Hunchifier</h1>
-          </Link>
-          <p className="text-primary">Viewing hunches for {params.uuid}</p>
-          <Link href="/admin">
-            <p className="text-primary hover:underline">Back to admin panel</p>
+        <header className="flex items-center justify-center w-full mt-8 px-4 py-2 border-b border-secondary">
+          <p className="text-primary">
+            Viewing hunches for {user?.first_name} {user?.last_name}
+          </p>
+          <Link href="/admin" className="absolute right-12 top-18">
+            <p className="text-primary hover:underline">Back to all hunches</p>
           </Link>
         </header>
       </div>
       <Table className="w-full">
-        <TableCaption>All hunches</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>User email</TableHead>
             <TableHead>Problem</TableHead>
             <TableHead>Solution</TableHead>
             <TableHead>Client</TableHead>
@@ -77,9 +91,6 @@ export default async function AdminPanel({
             return hunches?.map((hunch) => {
               return (
                 <TableRow key={hunch.id} className="hover:bg-secondary">
-                  <TableCell className="break-words max-w-64 align-top font-semibold">
-                    {hunch.email}
-                  </TableCell>
                   <TableCell className="break-words max-w-64 align-top">
                     {hunch.possible_problem}
                   </TableCell>

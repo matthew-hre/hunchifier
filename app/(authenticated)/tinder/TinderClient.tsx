@@ -167,8 +167,8 @@ export default function TinderClient({
   ];
 
   return (
-    <div className="flex flex-col items-center min-h-screen gap-2 mx-2">
-      <Card className="flex flex-col items-center justify-center w-full mt-16">
+    <div className="flex flex-col items-center absolute top-16 left-1 h-[calc(100dvh-4rem)] w-[calc(100vw-0.5rem)] gap-2 p-2">
+      <Card className="flex flex-col items-center justify-center w-full">
         <CardHeader>
           <p className="text-xl font-semibold text-primary">
             {badIdeasCount +

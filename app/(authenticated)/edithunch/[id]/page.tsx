@@ -104,30 +104,26 @@ export default async function EditHunch({
 
   const isOwner = await isHunchOwner();
 
+  if (isOwner) {
+    return (
+      <EditHunchFormClient
+        updateHunch={updateHunch}
+        originalHunch={hunch}
+        deeperHunch={deeperHunch}
+      />
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center min-h-screen">
-      <SEO pageTitle="Hunchifier" pageDescription="Create a new hunch" />
-      <Header />
-      {!isOwner ? (
-        <div className="w-full max-w-2xl pt-4 py-2 space-y-2 border-top border-secondary flex flex-col items-center align-middle mt-14 h-auto">
-          <h1 className="text-2xl font-semibold text-primary text-center w-full">
-            You are not authorized to edit this hunch
-          </h1>
-          <div className="w-full flex flex-row justify-center">
-            <Link href="/app">
-              <Button>Go Home</Button>
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <div className="w-full max-w-2xl pt-4 py-2 space-y-2 border-top border-secondary mt-14 h-auto">
-          <EditHunchFormClient
-            updateHunch={updateHunch}
-            originalHunch={hunch}
-            deeperHunch={deeperHunch}
-          />
-        </div>
-      )}
-    </div>
+    <>
+      <h1 className="text-2xl font-semibold text-primary text-center w-full">
+        You are not authorized to edit this hunch
+      </h1>
+      <div className="w-full flex flex-row justify-center">
+        <Link href="/app">
+          <Button>Go Home</Button>
+        </Link>
+      </div>
+    </>
   );
 }

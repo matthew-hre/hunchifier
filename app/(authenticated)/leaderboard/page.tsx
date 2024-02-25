@@ -55,59 +55,55 @@ export default async function Leaderboard() {
   };
 
   const getColor = (index: number, isUser: boolean) => {
-    if (index === 0) return "bg-yellow-200";
-    if (index === 1) return "bg-gray-200";
-    if (isUser) return "bg-blue-200";
+    if (index === 0) return "border-yellow-200 border-4";
+    if (index === 1) return "border-gray-200 border-4";
+    if (isUser) return "border-blue-200 border-4";
     return "";
   };
 
   const profiles = await getProfiles();
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
-      <SEO pageTitle="Hunchifier" pageDescription="Leaderboard" />
-      <Header />
-      <div className="w-full max-w-2xl py-2 space-y-2 border-top border-secondary mt-14">
-        {profiles?.map((profile: any, index: number) => {
-          const isWinner = index < 3;
-          const isUser = profile.user_id === userId;
+    <div className="flex flex-col w-full gap-2">
+      {profiles?.map((profile: any, index: number) => {
+        const isWinner = index < 3;
+        const isUser = profile.user_id === userId;
 
-          return (
-            <Card
-              key={profile.user_id}
-              className={`flex items-center p-4 ${
-                isWinner ? "flex-col" : "flex-row"
-              } ${getColor(index, isUser)}`}
-            >
-              <div className="flex flex-col items-center justify-center mr-4">
-                <h2
-                  className={`font-bold text-primary ${
-                    isWinner ? "text-4xl" : "bg-gray-200 text-lg"
-                  } rounded-full p-6 w-8 h-8 flex items-center justify-center`}
-                >
-                  {getBadge(index)}
-                </h2>
-              </div>
-              <div
-                className={`flex flex-col ${
-                  isWinner ? "items-center" : "items-left"
-                } justify-center mr-4`}
+        return (
+          <Card
+            key={profile.user_id}
+            className={`flex items-center p-4 ${
+              isWinner ? "flex-col" : "flex-row"
+            } ${getColor(index, isUser)}`}
+          >
+            <div className="flex flex-col items-center justify-center mr-4">
+              <h2
+                className={`font-bold text-primary ${
+                  isWinner ? "text-4xl" : "bg-secondary text-lg"
+                } rounded-full p-6 w-8 h-8 flex items-center justify-center`}
               >
-                <p
-                  className={`font-bold text-primary ${
-                    index < 3 ? "text-xl" : "text-md"
-                  }`}
-                >
-                  {profile.first_name} {profile.last_name}
-                </p>
-                <p className="text-sm text-primary">
-                  {isAdmin || isUser ? profile.hunch_count : "???"} hunches
-                </p>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+                {getBadge(index)}
+              </h2>
+            </div>
+            <div
+              className={`flex flex-col ${
+                isWinner ? "items-center" : "items-left"
+              } justify-center mr-4`}
+            >
+              <p
+                className={`font-bold text-primary ${
+                  index < 3 ? "text-xl" : "text-md"
+                }`}
+              >
+                {profile.first_name} {profile.last_name}
+              </p>
+              <p className="text-sm text-primary">
+                {isAdmin || isUser ? profile.hunch_count : "???"} hunches
+              </p>
+            </div>
+          </Card>
+        );
+      })}
     </div>
   );
 }

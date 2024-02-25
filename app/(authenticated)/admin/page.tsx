@@ -1,5 +1,6 @@
 import {
   Table,
+  TableBody,
   TableCaption,
   TableCell,
   TableHead,
@@ -45,31 +46,80 @@ export default async function AdminPanel() {
     return data;
   };
 
+  const getAllUsers = async () => {
+    const { data, error } = await supabase.from("user_hunch_count").select("*");
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    return data;
+  };
+
   return (
     <div className="absolute top-0 left-0 p-12 w-full flex flex-col items-center min-h-screen">
       <div className="flex flex-col items-center w-full">
-        <header className="flex items-center justify-between w-full px-4 py-2 border-b border-secondary">
-          <Link href="/app">
-            <h1 className="text-2xl font-bold">Hunchifier</h1>
-          </Link>
-          <p className="text-primary">Viewing all hunches</p>
-          <Link href="/app">
-            <p className="text-primary hover:underline">Exit admin panel</p>
-          </Link>
+        <header className="flex items-center justify-center w-full mt-8 px-4 py-2 border-b border-secondary">
+          <p className="text-primary">Hunchifier Users</p>
         </header>
       </div>
       <Table className="w-full">
-        <TableCaption>All hunches</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>User email</TableHead>
+            <TableHead>Name</TableHead>
+
+            <TableHead>Hunches Created</TableHead>
+            <TableHead>Hunches Deepened</TableHead>
+            <TableHead>Clients Discovered</TableHead>
+            <TableHead className="text-right">Email</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {await getAllUsers().then((users: any) => {
+            return users?.map((user: any) => {
+              return (
+                <TableRow key={user.id} className="hover:bg-secondary">
+                  <TableCell className="break-words max-w-64 align-top font-semibold">
+                    <Link
+                      href={`/admin/${user.user_id}`}
+                      className="text-primary hover:underline"
+                    >
+                      {user.first_name} {user.last_name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="break-words max-w-64 align-top">
+                    {user.hunch_count}
+                  </TableCell>
+                  <TableCell className="break-words max-w-64 align-top">
+                    {user.extended_count}
+                  </TableCell>
+                  <TableCell className="break-words max-w-64 align-top">
+                    {user.discovery_count}
+                  </TableCell>
+                  <TableCell className="text-right">{user.email}</TableCell>
+                </TableRow>
+              );
+            });
+          })}
+        </TableBody>
+      </Table>
+      <div className="flex flex-col items-center w-full">
+        <header className="flex items-center justify-center w-full mt-8 px-4 py-2 border-b border-secondary">
+          <p className="text-primary">Hunchifier Hunches</p>
+        </header>
+      </div>
+      <Table className="w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead>User</TableHead>
             <TableHead>Problem</TableHead>
             <TableHead>Solution</TableHead>
             <TableHead>Client</TableHead>
             <TableHead className="text-right">Created at</TableHead>
           </TableRow>
         </TableHeader>
-        <tbody>
+        <TableBody>
           {await getAllHunches().then((hunches) => {
             return hunches?.map((hunch) => {
               return (
@@ -79,7 +129,7 @@ export default async function AdminPanel() {
                       href={`/admin/${hunch.user_id}`}
                       className="text-primary hover:underline"
                     >
-                      {hunch.email}
+                      {hunch.first_name} {hunch.last_name}
                     </Link>
                   </TableCell>
                   <TableCell className="break-words max-w-64 align-top">
@@ -98,7 +148,7 @@ export default async function AdminPanel() {
               );
             });
           })}
-        </tbody>
+        </TableBody>
       </Table>
     </div>
   );

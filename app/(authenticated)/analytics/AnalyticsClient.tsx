@@ -23,8 +23,8 @@ export default function AnalyticsClient(props: any) {
   }, [props.hourlyData, props.dailyData]);
 
   return (
-    <div className="flex flex-col w-full mt-10">
-      <main className="flex min-h-screen- flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+    <div className="flex flex-col w-full mt-10 absolute top-0 left-0">
+      <main className="flex h-screen flex-1 flex-col gap-4 md:gap-8 md:p-10">
         <div className="grid gap-6">
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="flex flex-col">

@@ -16,8 +16,6 @@ export default async function Tinder() {
       .select("tinder")
       .eq("user_id", userId);
 
-    console.log(data);
-
     if (error) {
       console.error(error);
       return;
@@ -96,13 +94,10 @@ export default async function Tinder() {
   await isUserAdmin();
 
   return (
-    <>
-      <Header />
-      <TinderClient
-        getExistingStats={getExistingStats}
-        getRandomHunch={getRandomHunch}
-        rateHunch={rateHunch}
-      />
-    </>
+    <TinderClient
+      getExistingStats={getExistingStats}
+      getRandomHunch={getRandomHunch}
+      rateHunch={rateHunch}
+    />
   );
 }

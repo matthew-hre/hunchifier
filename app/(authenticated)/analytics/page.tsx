@@ -48,17 +48,10 @@ export default async function AnalyticsServer(props: any) {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
-      <SEO
-        pageTitle="Hunchifier"
-        pageDescription="Born out of a hatred for Miro"
-      />
-      <Header />
-      <AnalyticsClient
-        hourlyData={hourlyData}
-        dailyData={dailyData}
-        isAdmin={isAdmin}
-      />
-    </div>
+    <AnalyticsClient
+      hourlyData={hourlyData}
+      dailyData={dailyData}
+      isAdmin={isAdmin}
+    />
   );
 }
