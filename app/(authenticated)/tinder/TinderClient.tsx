@@ -200,7 +200,7 @@ export default function TinderClient({
           <CardHeader className="pb-4">
             <CardDescription>Made by {hunchAuthor}</CardDescription>
           </CardHeader>
-          <CardContent className="pb-2 max-h-[calc(100vh-22rem)]">
+          <CardContent className="pb-8 max-h-[calc(100vh-22rem)]">
             <div className="mb-2">
               <p className={`text-lg font-semibold text-primary`}>
                 Possible Problem

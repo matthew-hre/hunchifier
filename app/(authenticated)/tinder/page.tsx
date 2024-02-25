@@ -11,17 +11,19 @@ export default async function Tinder() {
   const isUserAdmin = async () => {
     const supabase = createClient();
 
-    let { data: profiles, error } = await supabase
+    let { data, error } = await supabase
       .from("user_permissions")
       .select("tinder")
       .eq("user_id", userId);
+
+    console.log(data);
 
     if (error) {
       console.error(error);
       return;
     }
 
-    if (!profiles || !profiles[0]?.tinder) {
+    if (!data || !data[0]?.tinder) {
       redirect("/app");
     }
   };

@@ -1,14 +1,24 @@
 import Link from "next/link";
 
 import { createClient } from "@/lib/supabase/server";
+import { getUserId } from "@/lib/supabase/utils";
 import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 
 // react icons
-import { IoLogOut, IoTrophy, IoHome, IoStatsChart } from "react-icons/io5";
+import {
+  IoLogOut,
+  IoTrophy,
+  IoHome,
+  IoStatsChart,
+  IoFlame,
+  IoShield,
+} from "react-icons/io5";
 
 export default async function Header() {
+  const userId = await getUserId();
+
   const logout = async () => {
     "use server";
 
@@ -26,6 +36,25 @@ export default async function Header() {
     return redirect("/login");
   };
 
+  const getPermissions = async () => {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+      .from("user_permissions")
+      .select("admin, tinder")
+      .eq("user_id", userId)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    return data;
+  };
+
+  const permissions = await getPermissions();
+
   // Define navigation items
   const navItems = [
     { href: "/app", icon: IoHome, label: "Home", hideOnMobile: true },
@@ -39,8 +68,16 @@ export default async function Header() {
       icon: IoLogOut,
       label: "Logout",
       logoutAction: logout,
-    }, // Assuming logoutFunction is defined elsewhere
+    },
   ];
+
+  if (permissions?.admin) {
+    navItems.unshift({ href: "/admin", icon: IoShield, label: "Admin" });
+  }
+
+  if (permissions?.tinder) {
+    navItems.unshift({ href: "/tinder", icon: IoFlame, label: "Tinder" });
+  }
 
   return (
     <header className="fixed z-10 bg-background flex items-center justify-between w-full px-4 py-2 border-b border-secondary">
