@@ -41,9 +41,9 @@ export default async function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main>{children}</main>
-        </ThemeProvider>
+        {/* <ThemeProvider attribute="class" defaultTheme="system" enableSystem> */}
+        <main>{children}</main>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );

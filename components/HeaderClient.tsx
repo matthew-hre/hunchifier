@@ -15,29 +15,29 @@ import {
   IoMoon,
 } from "react-icons/io5";
 
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes";
 
 export default function HeaderClient({ navItems }: { navItems: any }) {
-  const { theme, setTheme } = useTheme();
+  //   const { theme, setTheme } = useTheme();
 
-  const toggleTheme = () => {
-    console.log("toggling theme");
-    if (theme === "light") {
-      setTheme("dark");
-    }
-    if (theme === "dark") {
-      setTheme("light");
-    }
-  };
+  //   const toggleTheme = () => {
+  //     console.log("toggling theme");
+  //     if (theme === "light") {
+  //       setTheme("dark");
+  //     }
+  //     if (theme === "dark") {
+  //       setTheme("light");
+  //     }
+  //   };
 
   // such a hack
   const navItemsWithTheme = [
     ...navItems,
-    {
-      icon: theme === "light" ? "IoMoon" : "IoSunny",
-      label: theme === "light" ? <IoMoon size={24} /> : <IoSunny size={24} />,
-      logoutAction: toggleTheme,
-    },
+    // {
+    //   icon: theme === "light" ? "IoMoon" : "IoSunny",
+    //   label: theme === "light" ? <IoMoon size={24} /> : <IoSunny size={24} />,
+    //   logoutAction: toggleTheme,
+    // },
   ];
 
   return (
