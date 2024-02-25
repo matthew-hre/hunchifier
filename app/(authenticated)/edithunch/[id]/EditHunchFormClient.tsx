@@ -24,9 +24,11 @@ export default function EditHunchFormClient({
   const initialSolution = originalHunch.possible_solution;
   const initialUsers = originalHunch.possible_client;
 
-  const deeperHunchProblem = deeperHunch[0]?.problem || "";
-  const deeperHunchSolution = deeperHunch[0]?.solution || "";
-  const deeperHunchClient = deeperHunch[0]?.client || "";
+  const deeperHunchExists = deeperHunch && deeperHunch.length > 0;
+
+  const deeperHunchProblem = deeperHunchExists ? deeperHunch[0]?.problem : "";
+  const deeperHunchSolution = deeperHunchExists ? deeperHunch[0]?.solution : "";
+  const deeperHunchClient = deeperHunchExists ? deeperHunch[0]?.client : "";
 
   useEffect(() => {
     const problemInput = document.getElementById("problem") as HTMLInputElement;
@@ -35,23 +37,21 @@ export default function EditHunchFormClient({
     ) as HTMLInputElement;
     const usersInput = document.getElementById("users") as HTMLInputElement;
 
-    const deeperProblemInput = document.getElementById(
-      "deeperProblem"
-    ) as HTMLInputElement;
-
-    const deeperSolutionInput = document.getElementById(
-      "deeperSolution"
-    ) as HTMLInputElement;
-
-    const deeperUsersInput = document.getElementById(
-      "deeperUsers"
-    ) as HTMLInputElement;
-
     problemInput.value = initialProblem;
     solutionInput.value = initialSolution;
     usersInput.value = initialUsers;
 
-    if (deeperHunch) {
+    if (deeperHunchExists) {
+      const deeperProblemInput = document.getElementById(
+        "deeperProblem"
+      ) as HTMLInputElement;
+      const deeperSolutionInput = document.getElementById(
+        "deeperSolution"
+      ) as HTMLInputElement;
+      const deeperUsersInput = document.getElementById(
+        "deeperUsers"
+      ) as HTMLInputElement;
+
       deeperProblemInput.value = deeperHunchProblem;
       deeperSolutionInput.value = deeperHunchSolution;
       deeperUsersInput.value = deeperHunchClient;
@@ -64,6 +64,7 @@ export default function EditHunchFormClient({
     deeperHunchSolution,
     deeperHunchClient,
     deeperHunch,
+    deeperHunchExists,
   ]);
 
   const handleUpdateHunch = async (e: any) => {
