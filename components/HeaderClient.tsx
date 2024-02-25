@@ -47,7 +47,7 @@ export default function HeaderClient({
           <NavItem key={index} {...item} />
         ))}
         <button
-          onClick={() => toggleTheme()}
+          onClick={toggleTheme}
           className="flex flex-row items-center space-x-6 ml-4"
         >
           {theme === "light" ? <IoMoon size={24} /> : <IoSunny size={24} />}
