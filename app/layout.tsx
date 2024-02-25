@@ -8,7 +8,10 @@ const fontSans = FontSans({
 });
 
 import { cn } from "@/lib/utils";
-import ThemeProvider from "@/components/ThemeProvider";
+import dynamic from "next/dynamic";
+const ThemeProvider = dynamic(() => import("@/components/ThemeProvider"), {
+  ssr: false,
+});
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -38,7 +41,7 @@ export default async function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <main>{children}</main>
         </ThemeProvider>
       </body>
