@@ -119,7 +119,7 @@ export default function EditHunchFormClient({
           required
         />
       </div>
-      {deeperHunch && deeperHunch > 0 ? (
+      {deeperHunch && deeperHunch.length > 0 ? (
         <>
           <div className="flex flex-col">
             <Label htmlFor="problem" className="mb-4">
