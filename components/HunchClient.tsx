@@ -79,7 +79,7 @@ export default function HunchClient({
                 )}
                 {deleting ? (
                   <AlertDialogAction disabled>
-                    <Loader2 className="w-4 h-4 mr-2" />
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Deleting...
                   </AlertDialogAction>
                 ) : (

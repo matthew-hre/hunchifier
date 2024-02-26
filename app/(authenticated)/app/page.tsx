@@ -1,37 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
-import Hunch from "@/components/Hunch";
-
-import Link from "next/link";
-
-import { FiPlus } from "react-icons/fi";
-import { Card } from "@/components/ui/card";
-import HunchCounter from "@/components/HunchCounter";
 
 import { getUserId } from "@/lib/supabase/utils";
+import HunchList from "./HunchList";
+
+import { Card } from "@/components/ui/card";
+import Link from "next/link";
+import { FiPlus } from "react-icons/fi";
+import HunchCounter from "@/components/HunchCounter";
+import Hunch from "@/components/Hunch";
 
 export default async function Index() {
-  const userId = await getUserId();
+  const INITIAL_FETCH_LIMIT = 10;
 
-  const getHunches = async () => {
-    const supabase = createClient();
-
-    const { data, error } = await supabase
-      .from("hunches")
-      .select(
-        "id, created_at, possible_problem, possible_solution, possible_client"
-      )
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    return data;
-  };
-
-  const hunches = await getHunches();
+  const hunches = await getHunches(0, INITIAL_FETCH_LIMIT);
 
   return (
     <>
@@ -57,9 +38,34 @@ export default async function Index() {
           </Link>
         </Card>
       </div>
-      {hunches?.map((hunch) => (
-        <Hunch key={hunch.id} hunch={hunch} />
-      ))}
+      <HunchList initialHunches={hunches} getHunches={getHunches} />
     </>
   );
+}
+
+async function getHunches(offset: number, limit: number) {
+  "use server";
+
+  const supabase = createClient();
+  const userId = await getUserId();
+
+  const { data, error } = await supabase
+    .from("hunches")
+    .select(
+      "id, created_at, possible_problem, possible_solution, possible_client"
+    )
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const hunches = data.map((hunch) => {
+    return <Hunch key={hunch.id} hunch={hunch} />;
+  });
+
+  return hunches;
 }
