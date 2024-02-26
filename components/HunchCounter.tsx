@@ -27,13 +27,13 @@ export default async function HunchCounter() {
   const getHunches = async () => {
     const hunchCounts = await getHunchCounts();
 
-    return hunchCounts?.hunch_count ?? 2;
+    return hunchCounts?.hunch_count ?? 0;
   };
 
   const getExtendedHunches = async () => {
     const hunchCounts = await getHunchCounts();
 
-    return hunchCounts?.extended_count ?? 1;
+    return hunchCounts?.extended_count ?? 0;
   };
 
   const hunchesLeft = await getHunches();

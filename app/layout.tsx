@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 const ThemeProvider = dynamic(() => import("@/components/ThemeProvider"), {
   ssr: false,
+});
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
 });
 
 const defaultUrl = process.env.VERCEL_URL
@@ -42,7 +44,11 @@ export default async function RootLayout({
     >
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main>{children}</main>
+          <main>
+            {children}
+            <SpeedInsights />
+            <Analytics />
+          </main>
         </ThemeProvider>
       </body>
     </html>
