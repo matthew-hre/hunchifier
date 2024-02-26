@@ -8,7 +8,6 @@ import { Card } from "@/components/ui/card";
 import HunchCounter from "@/components/HunchCounter";
 
 import { getUserId } from "@/lib/supabase/utils";
-import Loading from "./loading";
 
 export default async function Index() {
   const userId = await getUserId();

@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 
 import HunchFormClient from "./HunchFormClient";
 import { getUserId } from "@/lib/supabase/utils";
-import Loading from "./loading";
 
 export default async function newHunch() {
   const userId = await getUserId();

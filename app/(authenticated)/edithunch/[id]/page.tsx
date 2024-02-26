@@ -2,8 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 import EditHunchFormClient from "./EditHunchFormClient";
-import Header from "@/components/Header";
-import SEO from "@/components/SEO";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getUserId } from "@/lib/supabase/utils";

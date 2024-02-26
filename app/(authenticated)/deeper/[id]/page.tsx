@@ -3,8 +3,6 @@ import { getUserId } from "@/lib/supabase/utils";
 import { redirect } from "next/navigation";
 
 import EditHunchFormClient from "./DeeperHunchFormClient";
-import Header from "@/components/Header";
-import SEO from "@/components/SEO";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
