@@ -6,11 +6,9 @@ import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { Card } from "@/components/ui/card";
 import HunchCounter from "@/components/HunchCounter";
-import Header from "@/components/Header";
-import SEO from "@/components/SEO";
 
-import { Suspense } from "react";
 import { getUserId } from "@/lib/supabase/utils";
+import Loading from "./loading";
 
 export default async function Index() {
   const userId = await getUserId();
@@ -41,28 +39,28 @@ export default async function Index() {
       <Card className="flex flex-col items-center justify-center p-4 pt-2">
         <HunchCounter />
       </Card>
-      <Card>
-        <Link href="/newhunch">
-          <button
-            type="submit"
-            className="w-full flex flex-row items-center justify-center p-4 hover:bg-secondary transition-colors duration-200"
-          >
-            <FiPlus size={20} />
-            <span
-              className="ml-2
+      <div className="flex flex-col items-center justify-center pb-4 px-2 pt-0 fixed bottom-0 left-0 z-10 w-full sm:static sm:p-0 bg-gradient-to-t from-background">
+        <Card className="w-full">
+          <Link href="/newhunch">
+            <button
+              type="submit"
+              className="w-full flex flex-row items-center justify-center p-4 hover:bg-secondary transition-colors duration-200"
+            >
+              <FiPlus size={20} />
+              <span
+                className="ml-2
               text-md font-semibold text-primary
               "
-            >
-              New Hunch
-            </span>
-          </button>
-        </Link>
-      </Card>
-      <Suspense fallback={<div>Loading...</div>}>
-        {hunches?.map((hunch) => (
-          <Hunch key={hunch.id} hunch={hunch} />
-        ))}
-      </Suspense>
+              >
+                New Hunch
+              </span>
+            </button>
+          </Link>
+        </Card>
+      </div>
+      {hunches?.map((hunch) => (
+        <Hunch key={hunch.id} hunch={hunch} />
+      ))}
     </>
   );
 }

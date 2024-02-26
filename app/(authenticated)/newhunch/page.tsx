@@ -2,9 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 import HunchFormClient from "./HunchFormClient";
-import Header from "@/components/Header";
-import SEO from "@/components/SEO";
 import { getUserId } from "@/lib/supabase/utils";
+import Loading from "./loading";
 
 export default async function newHunch() {
   const userId = await getUserId();

@@ -3,7 +3,6 @@ import { getUserId } from "@/lib/supabase/utils";
 import { redirect } from "next/navigation";
 
 import TinderClient from "./TinderClient";
-import Header from "@/components/Header";
 
 export default async function Tinder() {
   const userId = await getUserId();

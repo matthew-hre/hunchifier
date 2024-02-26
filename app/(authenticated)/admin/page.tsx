@@ -12,6 +12,7 @@ import { getUserId } from "@/lib/supabase/utils";
 import { redirect } from "next/navigation";
 
 import Link from "next/link";
+import Loading from "./loading";
 
 export default async function AdminPanel() {
   const supabase = createClient();

@@ -2,8 +2,6 @@
 import AnalyticsClient from "./AnalyticsClient";
 import { createClient } from "@/lib/supabase/server";
 import { getUserId } from "@/lib/supabase/utils";
-import Header from "@/components/Header";
-import SEO from "@/components/SEO";
 
 export default async function AnalyticsServer(props: any) {
   const supabase = createClient();

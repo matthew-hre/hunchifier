@@ -2,10 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 
 import { Card } from "@/components/ui/card";
 
-import Header from "@/components/Header";
-
-import SEO from "@/components/SEO";
-
 import { getUserId } from "@/lib/supabase/utils";
 
 export default async function Leaderboard() {
