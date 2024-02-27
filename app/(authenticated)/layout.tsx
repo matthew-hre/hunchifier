@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getUserId } from "@/lib/supabase/utils";
 
-import Header from "@/components/Header";
+import Header from "@/components/header/Header";
 
 export default async function Layout({
   children,

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 
 import { useState } from "react";
-import Header from "@/components/Header";
+import Header from "@/components/header/Header";
 
 export default function SignUpFormClient({
   searchParams,

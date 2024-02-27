@@ -2,35 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import HunchClient from "./HunchClient";
 import { redirect } from "next/navigation";
 
-export default async function Hunch({ hunch }: any) {
-  const deleteHunch = async () => {
-    "use server";
-
-    const supabase = createClient();
-
-    const { error } = await supabase
-      .from("hunches_ext")
-      .delete()
-      .eq("hunchID", hunch.id);
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    const { error: error2 } = await supabase
-      .from("hunches")
-      .delete()
-      .eq("id", hunch.id);
-
-    if (error2) {
-      console.error(error);
-      return;
-    }
-
-    return redirect("/app");
-  };
-
+export default async function Hunch({ hunch }: { hunch: any }) {
   const getTimestamp = () => {
     // if there's no "last updated" date, return "created at" date
     if (!hunch.updated_at) {
@@ -79,3 +51,31 @@ function formatDateTime(date: string) {
   });
   return localDate;
 }
+
+const deleteHunch = async (hunch_id: any) => {
+  "use server";
+
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("hunches_ext")
+    .delete()
+    .eq("hunchID", hunch_id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const { error: error2 } = await supabase
+    .from("hunches")
+    .delete()
+    .eq("id", hunch_id);
+
+  if (error2) {
+    console.error(error);
+    return;
+  }
+
+  return redirect("/app");
+};

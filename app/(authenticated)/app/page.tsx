@@ -7,10 +7,12 @@ import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import HunchCounter from "@/components/HunchCounter";
-import Hunch from "@/components/Hunch";
+import Hunch from "@/components/hunch/Hunch";
+
+import { redirect } from "next/navigation";
 
 export default async function Index() {
-  const INITIAL_FETCH_LIMIT = 10;
+  const INITIAL_FETCH_LIMIT = 5;
 
   const hunches = await getHunches(0, INITIAL_FETCH_LIMIT);
 
@@ -43,6 +45,34 @@ export default async function Index() {
   );
 }
 
+const deleteHunch = async (hunch_id: any) => {
+  "use server";
+
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("hunches_ext")
+    .delete()
+    .eq("hunchID", hunch_id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const { error: error2 } = await supabase
+    .from("hunches")
+    .delete()
+    .eq("id", hunch_id);
+
+  if (error2) {
+    console.error(error);
+    return;
+  }
+
+  return redirect("/app");
+};
+
 async function getHunches(offset: number, limit: number) {
   "use server";
 
@@ -64,7 +94,7 @@ async function getHunches(offset: number, limit: number) {
   }
 
   const hunches = data.map((hunch) => {
-    return <Hunch key={hunch.id} hunch={hunch} />;
+    return <Hunch key={hunch.id} hunch={hunch} deleteHunch={deleteHunch} />;
   });
 
   return hunches;

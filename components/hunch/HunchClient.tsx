@@ -39,15 +39,21 @@ export default function HunchClient({
 }) {
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   const handleDeleteWithWait = async (event: any) => {
     setDeleting(true);
-    deleteHunch().then(() => {
+    deleteHunch(hunch.id).then(() => {
       setOpen(false);
       setDeleting(false);
+      setHidden(true);
     });
     event.preventDefault();
   };
+
+  if (hidden) {
+    return null;
+  }
 
   return (
     <Card

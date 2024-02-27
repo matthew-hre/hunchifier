@@ -2,8 +2,9 @@
 
 import { Loader2 } from "lucide-react";
 
-import { useState, useEffect, ReactComponentElement } from "react";
+import { useState, useEffect, ReactComponentElement, Suspense } from "react";
 import { useInView } from "react-intersection-observer";
+import LoadingCard from "./LoadingCard";
 
 export default function HunchList({
   initialHunches,
@@ -12,19 +13,17 @@ export default function HunchList({
   initialHunches: any;
   getHunches: any;
 }) {
-  const NUMBER_OF_HUNCHES_TO_FETCH = 10;
+  const NUMBER_OF_HUNCHES_TO_FETCH = 5;
 
   const [offset, setOffset] = useState(NUMBER_OF_HUNCHES_TO_FETCH);
   const [hunches, setHunches] = useState(initialHunches);
-  const [outOfHunches, setOutOfHunches] = useState(
-    NUMBER_OF_HUNCHES_TO_FETCH > initialHunches.length
-  );
+  const [outOfHunches, setOutOfHunches] = useState(false);
   const { ref, inView } = useInView();
 
   const getMoreHunches = async () => {
     const moreHunches = await getHunches(offset, NUMBER_OF_HUNCHES_TO_FETCH);
 
-    if (moreHunches.length < NUMBER_OF_HUNCHES_TO_FETCH) {
+    if (moreHunches.length == 0) {
       setOutOfHunches(true);
       return;
     }
@@ -43,7 +42,13 @@ export default function HunchList({
 
   return (
     <>
-      {hunches.map((Hunch: ReactComponentElement<any>) => Hunch)}
+      {hunches.map((Hunch: ReactComponentElement<any>, index: number) => {
+        return (
+          <Suspense key={index} fallback={<LoadingCard />}>
+            {Hunch}
+          </Suspense>
+        );
+      })}
       <div ref={ref}>
         {outOfHunches ? (
           <p className="text-center text-muted-foreground text-md my-4">

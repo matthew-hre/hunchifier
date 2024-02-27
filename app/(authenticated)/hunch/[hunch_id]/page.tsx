@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getUserId } from "@/lib/supabase/utils";
-import Hunch from "@/components/Hunch";
+import Hunch from "@/components/hunch/Hunch";
 
 export default async function HunchPage({
   params: { hunch_id },
@@ -76,10 +76,10 @@ export default async function HunchPage({
       return;
     }
 
-    return redirect("/app");
+    return redirect("/login");
   };
 
-  return <Hunch hunch={hunch} />;
+  // return <Hunch hunch={hunch} />;
 }
 
 function formatDateTime(created_at: any) {
