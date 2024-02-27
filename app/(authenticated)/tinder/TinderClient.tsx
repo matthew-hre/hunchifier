@@ -13,6 +13,16 @@ import { useState, useEffect } from "react";
 
 import { ResponsivePie } from "@nivo/pie";
 
+import {
+  FiThumbsUp,
+  FiThumbsDown,
+  FiSmile,
+  FiFrown,
+  FiHelpCircle,
+  FiRepeat,
+} from "react-icons/fi";
+import { FaRobot } from "react-icons/fa";
+
 export default function TinderClient({
   getExistingStats,
   getRandomHunch,
@@ -117,6 +127,7 @@ export default function TinderClient({
       bgcolor: "bg-pink-500",
       hovercolor: "hover:bg-pink-200 hover:text-pink-800",
       onClick: handleBadIdea,
+      icon: <FiFrown size={24} />,
     },
     {
       id: "Funny Idea",
@@ -126,6 +137,7 @@ export default function TinderClient({
       bgcolor: "bg-yellow-500",
       hovercolor: "hover:bg-yellow-200 hover:text-yellow-800",
       onClick: handleFunnyIdea,
+      icon: <FiHelpCircle size={24} />,
     },
 
     {
@@ -136,6 +148,7 @@ export default function TinderClient({
       bgcolor: "bg-green-500",
       hovercolor: "hover:bg-green-200 hover:text-green-800",
       onClick: handleGoodIdea,
+      icon: <FiThumbsUp size={24} />,
     },
     {
       id: "GPD'd Idea",
@@ -145,6 +158,7 @@ export default function TinderClient({
       bgcolor: "bg-blue-500",
       hovercolor: "hover:bg-blue-200 hover:text-blue-800",
       onClick: handleGpt,
+      icon: <FaRobot size={24} />,
     },
     {
       id: "Existing Idea",
@@ -154,6 +168,7 @@ export default function TinderClient({
       bgcolor: "bg-teal-500",
       hovercolor: "hover:bg-teal-200 hover:text-teal-800",
       onClick: handleExists,
+      icon: <FiRepeat size={24} />,
     },
     {
       id: "...what?",
@@ -163,13 +178,14 @@ export default function TinderClient({
       bgcolor: "bg-orange-500",
       hovercolor: "hover:bg-orange-200 hover:text-orange-800",
       onClick: handleWhat,
+      icon: <FiHelpCircle size={24} />,
     },
   ];
 
   return (
     <div className="flex flex-col items-center absolute top-16 left-1 h-[calc(100dvh-4rem)] w-[calc(100vw-0.5rem)] gap-2 p-2">
       <Card className="flex flex-col items-center justify-center w-full">
-        <CardHeader>
+        <CardHeader className="p-2 md:p-6">
           <p className="text-xl font-semibold text-primary">
             {badIdeasCount +
               funnyIdeaCount +
@@ -233,10 +249,11 @@ export default function TinderClient({
         {graphData.map((button) => (
           <VoteButton
             key={button.id}
-            style={`${button.bgcolor} ${button.hovercolor} text-white p-6`}
+            style={`${button.bgcolor} ${button.hovercolor} text-white p-5 md:p-6`}
             onClick={button.onClick}
           >
-            {button.label}
+            {button.icon}
+            <p className="hidden md:block ml-2">{button.label}</p>
           </VoteButton>
         ))}
       </Card>
