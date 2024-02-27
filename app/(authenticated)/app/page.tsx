@@ -45,34 +45,6 @@ export default async function Index() {
   );
 }
 
-const deleteHunch = async (hunch_id: any) => {
-  "use server";
-
-  const supabase = createClient();
-
-  const { error } = await supabase
-    .from("hunches_ext")
-    .delete()
-    .eq("hunchID", hunch_id);
-
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  const { error: error2 } = await supabase
-    .from("hunches")
-    .delete()
-    .eq("id", hunch_id);
-
-  if (error2) {
-    console.error(error);
-    return;
-  }
-
-  return redirect("/app");
-};
-
 async function getHunches(offset: number, limit: number) {
   "use server";
 
@@ -94,7 +66,7 @@ async function getHunches(offset: number, limit: number) {
   }
 
   const hunches = data.map((hunch) => {
-    return <Hunch key={hunch.id} hunch={hunch} deleteHunch={deleteHunch} />;
+    return <Hunch key={hunch.id} hunch={hunch} />;
   });
 
   return hunches;
