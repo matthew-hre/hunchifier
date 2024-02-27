@@ -21,7 +21,7 @@ import {
   FiHelpCircle,
   FiRepeat,
 } from "react-icons/fi";
-import { FaRobot } from "react-icons/fa";
+import { FaLaughSquint, FaRobot } from "react-icons/fa";
 
 export default function TinderClient({
   getExistingStats,
@@ -137,7 +137,7 @@ export default function TinderClient({
       bgcolor: "bg-yellow-500",
       hovercolor: "hover:bg-yellow-200 hover:text-yellow-800",
       onClick: handleFunnyIdea,
-      icon: <FiHelpCircle size={24} />,
+      icon: <FaLaughSquint size={24} />,
     },
 
     {
@@ -245,11 +245,11 @@ export default function TinderClient({
           </CardContent>
         </Card>
       </div>
-      <Card className="flex flex-wrap justify-center gap-2 py-4 w-full mt-auto mb-2">
+      <Card className="flex flex-wrap justify-around sm:justify-center gap-2 py-4 w-full mt-auto mb-2">
         {graphData.map((button) => (
           <VoteButton
             key={button.id}
-            style={`${button.bgcolor} ${button.hovercolor} text-white p-5 md:p-6`}
+            style={`${button.bgcolor} ${button.hovercolor} text-white p-5 px-2 rounded-full sm:p-6 md:rounded-md`}
             onClick={button.onClick}
           >
             {button.icon}
