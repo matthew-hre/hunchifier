@@ -49,13 +49,13 @@ export default function HunchList({
           </Suspense>
         );
       })}
-      <div ref={ref}>
+      <div ref={ref} className="pb-16 sm:pb-0">
         {outOfHunches ? (
           <p className="text-center text-muted-foreground text-md my-4">
             You&apos;re all out of hunches. Time to make some more!
           </p>
         ) : (
-          <Loader2 className="w-8 h-8 mx-auto animate-spin" />
+          <Loader2 className="my-2 w-8 h-8 mx-auto animate-spin" />
         )}
       </div>
     </>
