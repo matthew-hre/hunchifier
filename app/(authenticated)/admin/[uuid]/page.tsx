@@ -65,13 +65,13 @@ export default async function AdminPanel({
   const user = await getUser();
 
   return (
-    <div className="absolute top-0 left-0 p-12 w-full flex flex-col items-center min-h-screen">
+    <div className="absolute top-0 left-0 p-12 px-4 md:px-12 w-full flex flex-col items-center min-h-screen">
       <div className="flex flex-col items-center w-full">
         <header className="flex items-center justify-center w-full mt-8 px-4 py-2 border-b border-secondary">
           <p className="text-primary">
             Viewing hunches for {user?.first_name} {user?.last_name}
           </p>
-          <Link href="/admin" className="absolute right-12 top-18">
+          <Link href="/admin" className="absolute left-12 top-16">
             <p className="text-primary hover:underline">Back to all hunches</p>
           </Link>
         </header>
@@ -87,7 +87,7 @@ export default async function AdminPanel({
         </TableHeader>
         <tbody>
           {await getAllHunches().then((hunches) => {
-            return hunches?.map((hunch) => {
+            return hunches?.map((hunch: any) => {
               return (
                 <TableRow key={hunch.id} className="hover:bg-secondary">
                   <TableCell className="break-words max-w-64 align-top">

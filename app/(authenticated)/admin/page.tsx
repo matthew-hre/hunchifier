@@ -57,7 +57,7 @@ export default async function AdminPanel() {
   };
 
   return (
-    <div className="absolute top-0 left-0 p-12 w-full flex flex-col items-center min-h-screen">
+    <div className="absolute top-0 left-0 p-12 px-4 md:px-12 w-full flex flex-col items-center min-h-screen">
       <div className="flex flex-col items-center w-full">
         <header className="flex items-center justify-center w-full mt-8 px-4 py-2 border-b border-secondary">
           <p className="text-primary">Hunchifier Users</p>
@@ -71,6 +71,7 @@ export default async function AdminPanel() {
             <TableHead>Hunches Created</TableHead>
             <TableHead>Hunches Deepened</TableHead>
             <TableHead>Clients Discovered</TableHead>
+            <TableHead>Personi Created</TableHead>
             <TableHead className="text-right">Email</TableHead>
           </TableRow>
         </TableHeader>
@@ -96,53 +97,10 @@ export default async function AdminPanel() {
                   <TableCell className="break-words max-w-64 align-top">
                     {user.discovery_count}
                   </TableCell>
+                  <TableCell className="break-words max-w-64 align-top">
+                    {user.personas_count}
+                  </TableCell>
                   <TableCell className="text-right">{user.email}</TableCell>
-                </TableRow>
-              );
-            });
-          })}
-        </TableBody>
-      </Table>
-      <div className="flex flex-col items-center w-full">
-        <header className="flex items-center justify-center w-full mt-8 px-4 py-2 border-b border-secondary">
-          <p className="text-primary">Hunchifier Hunches</p>
-        </header>
-      </div>
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead>User</TableHead>
-            <TableHead>Problem</TableHead>
-            <TableHead>Solution</TableHead>
-            <TableHead>Client</TableHead>
-            <TableHead className="text-right">Created at</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {await getAllHunches().then((hunches) => {
-            return hunches?.map((hunch) => {
-              return (
-                <TableRow key={hunch.id} className="hover:bg-secondary">
-                  <TableCell className="break-words max-w-64 align-top font-semibold">
-                    <Link
-                      href={`/admin/${hunch.user_id}`}
-                      className="text-primary hover:underline"
-                    >
-                      {hunch.first_name} {hunch.last_name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="break-words max-w-64 align-top">
-                    {hunch.possible_problem}
-                  </TableCell>
-                  <TableCell className="break-words max-w-64 align-top">
-                    {hunch.possible_solution}
-                  </TableCell>
-                  <TableCell className="break-words max-w-64 align-top">
-                    {hunch.possible_client}
-                  </TableCell>
-                  <TableCell className="text-right align-top">
-                    {formatDateTime(hunch.created_at)}
-                  </TableCell>
                 </TableRow>
               );
             });

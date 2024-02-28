@@ -42,13 +42,15 @@ export default function HunchList({
 
   return (
     <>
-      {hunches.map((Hunch: ReactComponentElement<any>, index: number) => {
-        return (
-          <Suspense key={index} fallback={<LoadingCard />}>
-            {Hunch}
-          </Suspense>
-        );
-      })}
+      <div className="flex flex-col w-full space-y-2 xl:grid xl:grid-cols-2 xl:space-y-0 xl:gap-2">
+        {hunches.map((Hunch: ReactComponentElement<any>, index: number) => {
+          return (
+            <Suspense key={index} fallback={<LoadingCard />}>
+              {Hunch}
+            </Suspense>
+          );
+        })}
+      </div>
       <div ref={ref} className="pb-16 sm:pb-0">
         {outOfHunches ? (
           <p className="text-center text-muted-foreground text-md my-4">
