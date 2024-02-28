@@ -10,6 +10,9 @@ import { getUserId } from "@/lib/supabase/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { FiArrowLeft } from "react-icons/fi";
+import AdminHunch from "./AdminHunch";
+
 export default async function AdminPanel({
   params,
 }: {
@@ -32,11 +35,16 @@ export default async function AdminPanel({
     redirect("/app");
   }
 
-  const getAllHunches = async () => {
+  async function getDeeperHunches() {
+    const supabase = createClient();
+
     const { data, error } = await supabase
       .from("detailed_hunches")
-      .select("*")
+      .select(
+        "id, created_at, possible_problem, possible_solution, possible_client, deeper_id, deeper_problem, deeper_solution, deeper_client"
+      )
       .eq("user_id", params.uuid)
+      .not("deeper_id", "is", null)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -44,9 +52,44 @@ export default async function AdminPanel({
       return;
     }
 
-    return data;
-  };
+    const hunches = data.map((hunch) => {
+      return hunch;
+    });
 
+    return hunches;
+  }
+
+  async function getHunches() {
+    "use server";
+
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+      .from("detailed_hunches")
+      .select(
+        "id, created_at, possible_problem, possible_solution, possible_client, deeper_id"
+      )
+      .eq("user_id", params.uuid)
+      .is("deeper_id", null)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const hunches = data.map((hunch) => {
+      return hunch;
+    });
+
+    return hunches;
+  }
+
+  const hunches = await getHunches();
+  const deeperHunches = await getDeeperHunches();
+
+  // matthew, in case you try and delete this again, no, we do need it, if the user
+  // doesn't have a hunch, we still need their name. dummy.
   const getUser = async () => {
     const { data, error } = await supabase
       .from("profiles")
@@ -72,48 +115,25 @@ export default async function AdminPanel({
             Viewing hunches for {user?.first_name} {user?.last_name}
           </p>
           <Link href="/admin" className="absolute left-12 top-16">
-            <p className="text-primary hover:underline">Back to all hunches</p>
+            <p className="text-primary hover:underline">
+              <FiArrowLeft className="inline" />
+            </p>
           </Link>
         </header>
       </div>
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead>Problem</TableHead>
-            <TableHead>Solution</TableHead>
-            <TableHead>Client</TableHead>
-            <TableHead className="text-right">Created at</TableHead>
-          </TableRow>
-        </TableHeader>
-        <tbody>
-          {await getAllHunches().then((hunches) => {
-            return hunches?.map((hunch: any) => {
-              return (
-                <TableRow key={hunch.id} className="hover:bg-secondary">
-                  <TableCell className="break-words max-w-64 align-top">
-                    {hunch.possible_problem}
-                  </TableCell>
-                  <TableCell className="break-words max-w-64 align-top">
-                    {hunch.possible_solution}
-                  </TableCell>
-                  <TableCell className="break-words max-w-64 align-top">
-                    {hunch.possible_client}
-                  </TableCell>
-                  <TableCell className="text-right align-top">
-                    {formatDateTime(hunch.created_at)}
-                  </TableCell>
-                </TableRow>
-              );
-            });
-          })}
-        </tbody>
-      </Table>
+      <div className="space-y-2 w-full mb-4">
+        {deeperHunches?.map((hunch: any) => {
+          return <AdminHunch hunch={hunch} key={hunch.id} />;
+        })}
+      </div>
+      <p className="text-md text-primary my-4 text-center lg:mt-0 lg:text-left">
+        Recent Hunches
+      </p>
+      <div className="space-y-2 w-full">
+        {hunches?.map((hunch: any) => {
+          return <AdminHunch hunch={hunch} key={hunch.id} />;
+        })}
+      </div>
     </div>
   );
-}
-
-function formatDateTime(date: Date) {
-  const d = new Date(date);
-  const localTime = d.toLocaleTimeString("en-US");
-  return `${d.toLocaleDateString()} ${localTime}`;
 }

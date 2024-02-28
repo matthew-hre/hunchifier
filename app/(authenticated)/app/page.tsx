@@ -85,12 +85,12 @@ export default async function Index() {
             </span>
           </p>
           <div className="space-y-2">
-            {extendedHunches > 0 ? (
-              deeperHunches
-            ) : (
+            {extendedHunches == 0 ? (
               <p className="text-muted-foreground text-md text-center my-8">
                 You haven&apos;t made any deeper hunches yet.
               </p>
+            ) : (
+              deeperHunches
             )}
           </div>
         </div>

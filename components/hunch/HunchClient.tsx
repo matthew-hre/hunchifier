@@ -23,8 +23,6 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
-
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
@@ -63,7 +61,7 @@ export default function HunchClient({
   return (
     <Card
       className={twMerge(
-        `relative ${
+        `relative break-inside-avoid-column ${
           deeperHunch ? "border-yellow-400 border-2 shadow-yellow-400" : ""
         }`,
         className

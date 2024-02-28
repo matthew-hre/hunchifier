@@ -44,7 +44,7 @@ export default function HeaderClient({ navItems }: { navItems: any }) {
   ];
 
   return (
-    <header className="fixed z-10 bg-background flex items-center justify-between w-full px-6 md:px-4 py-4 md:py-2 border-b border-secondary">
+    <header className="fixed z-20 bg-background flex items-center justify-between w-full px-6 md:px-4 py-4 md:py-2 border-b border-secondary">
       <Link href="/app">
         <h1 className="text-2xl font-bold hidden md:block ">Hunchifier</h1>
         <IoHome size={24} className="md:hidden" />
