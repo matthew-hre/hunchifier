@@ -53,7 +53,7 @@ export default async function DeeperHunch({
       return redirect("/edithunch?message=Invalid%20credentials");
     }
 
-    return redirect("/app");
+    return redirect("/hunch/" + hunch_id);
   };
 
   const isHunchOwner = async () => {

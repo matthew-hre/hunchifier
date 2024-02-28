@@ -52,7 +52,7 @@ function formatDateTime(date: string) {
   return localDate;
 }
 
-const deleteHunch = async (hunch_id: any) => {
+export const deleteHunch = async (hunch_id: any) => {
   "use server";
 
   const supabase = createClient();

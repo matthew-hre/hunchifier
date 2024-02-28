@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getUserId } from "@/lib/supabase/utils";
-import Hunch from "@/components/hunch/Hunch";
+import HunchPageClient from "./HunchPageClient";
 
 export default async function HunchPage({
   params: { hunch_id },
@@ -27,7 +27,7 @@ export default async function HunchPage({
 
   const hunch = await getHunch();
 
-  if (hunch.user_id !== userId) {
+  if (!hunch || hunch.user_id !== userId) {
     redirect("/app");
   }
 
@@ -55,31 +55,56 @@ export default async function HunchPage({
 
   const deeperHunch = await getDeeperHunch();
 
-  const deleteHunch = async () => {
-    const { error } = await supabase
-      .from("hunches_ext")
-      .delete()
-      .eq("hunchID", hunch.id);
+  const getDiscoveries = async (deeper_id: any) => {
+    const { data, error } = await supabase
+      .from("discovery")
+      .select("*")
+      .eq("extHunchID", deeper_id);
 
     if (error) {
       console.error(error);
       return;
     }
 
-    const { error: error2 } = await supabase
-      .from("hunches")
-      .delete()
-      .eq("id", hunch.id);
+    return data;
+  };
 
-    if (error2) {
+  const getPersonas = async (deeper_id: any) => {
+    const { data, error } = await supabase
+      .from("personas")
+      .select("*")
+      .eq("deeperID", deeper_id);
+
+    if (error) {
       console.error(error);
       return;
     }
 
-    return redirect("/login");
+    return data;
   };
 
-  // return <Hunch hunch={hunch} />;
+  if (deeperHunch) {
+    const discoveries = await getDiscoveries(deeperHunch?.id);
+    const personas = await getPersonas(deeperHunch?.id);
+
+    return (
+      <HunchPageClient
+        hunch={hunch}
+        timestamp={getTimestamp()}
+        deeperHunch={deeperHunch}
+        discoveries={discoveries}
+        personas={personas}
+      />
+    );
+  }
+
+  return (
+    <HunchPageClient
+      hunch={hunch}
+      timestamp={getTimestamp()}
+      deeperHunch={deeperHunch}
+    />
+  );
 }
 
 function formatDateTime(created_at: any) {

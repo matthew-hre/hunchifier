@@ -13,6 +13,8 @@ import { useState, useEffect } from "react";
 
 import { ResponsivePie } from "@nivo/pie";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 import {
   FiThumbsUp,
   FiThumbsDown,
@@ -85,7 +87,7 @@ export default function TinderClient({
   };
 
   const getNewHunch = async () => {
-    setPossibleProblem("Loading new hunch...");
+    setPossibleProblem("");
     setPossibleSolution("");
     setPossibleClient("");
     setHunchAuthor("");
@@ -223,7 +225,11 @@ export default function TinderClient({
                 Possible Problem
               </p>
               <p className="text-md text-muted-foreground break-words">
-                {possibleProblem}
+                {possibleProblem === "" ? (
+                  <Skeleton className="w-1/2 h-4 mb-2" />
+                ) : (
+                  possibleProblem
+                )}
               </p>
             </div>
             <div className="mb-2">
@@ -231,7 +237,11 @@ export default function TinderClient({
                 Possible Solution
               </p>
               <p className="text-md text-muted-foreground break-words">
-                {possibleSolution}
+                {possibleSolution === "" ? (
+                  <Skeleton className="w-1/2 h-4 mb-2" />
+                ) : (
+                  possibleSolution
+                )}
               </p>
             </div>
             <div className="mb-2">
@@ -239,7 +249,11 @@ export default function TinderClient({
                 Possible Client
               </p>
               <p className="text-md text-muted-foreground break-words">
-                {possibleClient}
+                {possibleClient === "" ? (
+                  <Skeleton className="w-1/2 h-4 mb-2" />
+                ) : (
+                  possibleClient
+                )}
               </p>
             </div>
           </CardContent>
